@@ -1,16 +1,15 @@
 import { AppSidebar, SiteHeader } from "@/components/custom"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 
-function LayoutProvider() {
+function LayoutProvider({children}) {
   return (
     <SidebarProvider>
       <AppSidebar variant="inset" />
       <SidebarInset>
         {/* header  */}
         <SiteHeader />
-        <div className="flex flex-1 flex-col">
-          body
-        </div>
+        {/* main body  */}
+        {children}
       </SidebarInset>
     </SidebarProvider>
   )

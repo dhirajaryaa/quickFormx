@@ -1,11 +1,18 @@
 import { Button } from "@/components/ui/button"
+import { Outlet } from "react-router"
+import LayoutProvider from "./layout"
 
 function App() {
-  return (
-        <div className="flex flex-col items-center justify-center min-h-svh">
-      <Button>Click me</Button>
-    </div>
-  )
+    return (
+        <>
+            <LayoutProvider >
+                <div>
+                    hello
+                </div>
+                <Outlet />
+            </LayoutProvider>
+        </>
+    )
 }
 
 export default App
