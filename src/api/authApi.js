@@ -11,4 +11,12 @@ const loginUser = async (userData) => {
         return error?.response?.data
     }
 }
-export { loginUser }
+const registerUser = async (userData) => {
+    try {
+        const response = await axios.post(`${API_URL}/auth/register`, userData);
+        return response.data;
+    } catch (error) {
+        return error?.response?.data
+    }
+}
+export { loginUser,registerUser }
