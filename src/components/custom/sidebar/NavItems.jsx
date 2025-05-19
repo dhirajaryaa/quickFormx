@@ -2,15 +2,10 @@ import { Button } from "@/components/ui/button"
 import { SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
 import { Layers, Send, BarChartIcon, PlusCircleIcon, Grid2X2 } from "lucide-react"
 import { Link } from "react-router";
-// import { Send } from "lucide-react"
-// import { BarChartIcon } from "lucide-react"
-// import { Grid2X2 } from "lucide-react"
-// import { PlusCircleIcon } from "lucide-react"
 import { useLocation } from "react-router"
 
 function NavItems() {
     const { pathname } = useLocation();
-
 
     const mainMenu = [
         {
