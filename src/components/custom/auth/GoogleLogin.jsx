@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 
-function GoogleLogin() {
+function GoogleLogin({label}) {
     return (
         <Button variant="secondary" type='button' className="w-full border" >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -9,7 +9,7 @@ function GoogleLogin() {
                     fill="currentColor"
                 />
             </svg>
-            Login with Google
+           {label || "login"} with Google
         </Button>
     )
 }
