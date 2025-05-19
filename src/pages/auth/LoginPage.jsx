@@ -16,21 +16,26 @@ import { loginSchema } from '@/schema/login'
 import { useAuth } from '@/hooks/useAuth'
 import { toast } from 'sonner'
 import { useNavigate } from 'react-router'
+import { Loader2 } from 'lucide-react'
+import useStore from '@/store'
 
 
 function LoginPage() {
-    const navigate = useNavigate()
-    const { loginHandler: {isPending, mutateAsync,error } } = useAuth()
-    const { register, formState: { errors }, handleSubmit } = useForm({
+    const navigate = useNavigate();
+    const { setUser } = useStore(state => state);
+    const { loginHandler: { isPending, mutateAsync } } = useAuth();
+    const { register, formState: { errors }, handleSubmit, setError } = useForm({
         resolver: zodResolver(loginSchema)
     })
-  async  function handleLogin({ email, password }) {
-    const res = await mutateAsync({ identifier: email, password })
-    if(res.statusCode >= 400){
-        toast.error(res.message)
-    }else{
-        navigate("/dashboard")
-    }
+    async function handleLogin({ email, password }) {
+        const res = await mutateAsync({ identifier: email, password })
+        if (res.statusCode >= 400) { // error
+            toast.error(res.message);
+            setError("root", { type: "custom", message: res.message });
+        } else { // success
+            setUser(res?.data?.user);
+            navigate("/dashboard");
+        }
     }
 
     return (
@@ -47,7 +52,7 @@ function LoginPage() {
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <form className='grid-gap-6' onSubmit={handleSubmit(handleLogin)}>
+                        <form onSubmit={handleSubmit(handleLogin)}>
                             {/* google login  */}
                             <GoogleLogin />
                             <div className="my-2 relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
@@ -55,7 +60,7 @@ function LoginPage() {
                                     Or continue with
                                 </span>
                             </div>
-                            <div className="grid gap-6">
+                            <div className="grid gap-4">
                                 <div className="grid gap-2">
                                     <Label htmlFor="email">Email</Label>
                                     <Input
@@ -70,9 +75,12 @@ function LoginPage() {
                                     <Label htmlFor="password">Password</Label>
                                     <PasswordInput error={errors.password} register={register} />
                                 </div>
-                                <Button type="submit" className="w-full">
-                                    Login
+                                <Button type="submit" className="w-full" disabled={isPending}>
+                                    {isPending ? <Loader2 className='size-7 animate-spin' /> : "Login"}
                                 </Button>
+                                {
+                                    errors.root && <span className='text-destructive text-sm text-center'>{errors.root.message}</span>
+                                }
                             </div>
                             <div className="text-center text-sm mt-2">
                                 Don&apos;t have an account?
