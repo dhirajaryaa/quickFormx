@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import App from './App'
-import { Dashboard, LoginPage, NotFoundPage, RegisterPage } from './pages'
+import { Dashboard, Forms, LoginPage, NotFoundPage, RegisterPage } from './pages'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from './components/ui/sonner'
 import { getAuthUser } from './lib/authChecker'
@@ -17,6 +17,10 @@ const router = createBrowserRouter([
             { //? default page with auth
                 path: "dashboard",
                 Component: Dashboard
+            },
+            { //? form page with auth
+                path: "forms",
+                Component: Forms
             }
         ]
     },
