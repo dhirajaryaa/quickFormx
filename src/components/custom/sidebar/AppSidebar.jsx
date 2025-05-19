@@ -1,7 +1,7 @@
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar'
 import { ArrowUpCircleIcon } from 'lucide-react'
 import React from 'react'
-import { Logo } from '..'
+import { Logo, LogoutBtn } from '..'
 
 function AppSidebar() {
   return (
@@ -23,7 +23,7 @@ function AppSidebar() {
        hello
       </SidebarContent>
       <SidebarFooter>
-       king
+       <LogoutBtn />
       </SidebarFooter>
     </Sidebar>
   )

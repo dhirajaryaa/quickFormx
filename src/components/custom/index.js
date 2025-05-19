@@ -3,11 +3,13 @@ import SiteHeader from "./sidebar/SiteHeader";
 import Logo from "./sidebar/Logo";
 import GoogleLogin from "./auth/GoogleLogin";
 import PasswordInput from "./auth/PasswordInput";
+import LogoutBtn from "./auth/LogoutBtn";
 
 export {
     AppSidebar,
     SiteHeader,
     Logo,
     GoogleLogin,
-    PasswordInput
+    PasswordInput,
+    LogoutBtn
 }
