@@ -1,11 +1,24 @@
-import { Button } from "@/components/ui/button"
+import { Outlet } from "react-router"
+import LayoutProvider from "./layout"
+import useStore from "./store"
+import { Navigate } from "react-router";
 
 function App() {
-  return (
-        <div className="flex flex-col items-center justify-center min-h-svh">
-      <Button>Click me</Button>
-    </div>
-  )
+    const { user } = useStore.getState();
+    if (!user) {
+        return <Navigate to={"/login"} replace />
+    }
+
+    return (
+        <>
+            <LayoutProvider >
+                <div>
+                    hello
+                </div>
+                <Outlet />
+            </LayoutProvider>
+        </>
+    )
 }
 
 export default App
