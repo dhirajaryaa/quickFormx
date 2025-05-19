@@ -12,9 +12,6 @@ function App() {
     return (
         <>
             <LayoutProvider >
-                <div>
-                    hello
-                </div>
                 <Outlet />
             </LayoutProvider>
         </>

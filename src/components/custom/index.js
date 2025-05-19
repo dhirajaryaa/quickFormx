@@ -4,6 +4,8 @@ import Logo from "./sidebar/Logo";
 import GoogleLogin from "./auth/GoogleLogin";
 import PasswordInput from "./auth/PasswordInput";
 import LogoutBtn from "./auth/LogoutBtn";
+import PageHeader from "./PageHeader";
+import ReportCard from "./ReportCard";
 
 export {
     AppSidebar,
@@ -11,5 +13,7 @@ export {
     Logo,
     GoogleLogin,
     PasswordInput,
-    LogoutBtn
+    LogoutBtn,
+    PageHeader,
+    ReportCard
 }
