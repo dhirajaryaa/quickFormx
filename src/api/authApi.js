@@ -1,7 +1,7 @@
 import axios from "axios";
 const API_URL = import.meta.env.VITE_API_URL
 
-axios.defaults.withCredentials= true;
+axios.defaults.withCredentials = true;
 
 const loginUser = async (userData) => {
     try {
@@ -19,4 +19,4 @@ const registerUser = async (userData) => {
         return error?.response?.data
     }
 }
-export { loginUser,registerUser }
+export { loginUser, registerUser }
