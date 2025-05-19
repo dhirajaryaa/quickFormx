@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import App from './App'
-import { LoginPage, NotFoundPage, RegisterPage } from './pages'
+import { Dashboard, LoginPage, NotFoundPage, RegisterPage } from './pages'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from './components/ui/sonner'
 import { getAuthUser } from './lib/authChecker'
@@ -12,12 +12,13 @@ const router = createBrowserRouter([
     { //* default page with auth
         path: "/",
         Component: App,
-        loader: getAuthUser
-    },
-    { //? default page with auth
-        path: "dashboard",
-        Component: App,
-        loader: getAuthUser
+        loader: getAuthUser,
+        children: [
+            { //? default page with auth
+                path: "dashboard",
+                Component: Dashboard
+            }
+        ]
     },
     { //? login page
         path: "login",
