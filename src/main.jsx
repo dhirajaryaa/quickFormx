@@ -6,15 +6,18 @@ import App from './App'
 import { LoginPage, NotFoundPage, RegisterPage } from './pages'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from './components/ui/sonner'
+import { getAuthUser } from './lib/authChecker'
 
 const router = createBrowserRouter([
     { //* default page with auth
         path: "/",
-        Component: App
+        Component: App,
+        loader: getAuthUser
     },
     { //? default page with auth
         path: "dashboard",
-        Component: App
+        Component: App,
+        loader: getAuthUser
     },
     { //? login page
         path: "login",
