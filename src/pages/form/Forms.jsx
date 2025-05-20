@@ -1,11 +1,10 @@
-import { CreateFormBtn, FormSkeleton, PageHeader } from '@/components/custom'
+import { CreateFormModal, FormSkeleton, PageHeader } from '@/components/custom'
 import FormCard from '@/components/custom/form/FormCard';
 import { useForm } from '@/hooks/useForm'
 import useStore from '@/store';
 import { Suspense } from 'react';
 import { useEffect } from 'react';
 import { Link } from 'react-router';
-import { NavLink } from 'react-router';
 
 function Forms() {
     const { getAllForm: { data, isLoading } } = useForm();
@@ -24,7 +23,7 @@ function Forms() {
             {/* content  */}
             <section className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-6 gap-4 py-3'>
                 {/* create new task */}
-                <CreateFormBtn />
+                <CreateFormModal />
                 <Suspense fallback={[1, 2, 3, 4].map((el) => <FormSkeleton key={el} />)}>
                     {
                         forms?.map((form) =>
