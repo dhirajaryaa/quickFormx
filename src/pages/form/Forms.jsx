@@ -4,6 +4,8 @@ import { useForm } from '@/hooks/useForm'
 import useStore from '@/store';
 import { Suspense } from 'react';
 import { useEffect } from 'react';
+import { Link } from 'react-router';
+import { NavLink } from 'react-router';
 
 function Forms() {
     const { getAllForm: { data, isLoading } } = useForm();
@@ -25,10 +27,11 @@ function Forms() {
                 <CreateFormBtn />
                 <Suspense fallback={[1, 2, 3, 4].map((el) => <FormSkeleton key={el} />)}>
                     {
-                        forms?.map((form) => {
-                            return <FormCard key={form._id} form={form} />
-                        })
-                    }
+                        forms?.map((form) =>
+                            <Link className={"rounded-2xl w-full"} key={form._id} to={`/forms/${form._id}`} >
+                                <FormCard form={form} />
+                            </Link>
+                        )}
                 </Suspense>
             </section>
         </main>
