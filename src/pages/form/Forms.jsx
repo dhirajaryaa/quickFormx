@@ -1,9 +1,8 @@
-import { PageHeader } from '@/components/custom'
+import { CreateFormBtn, FormSkeleton, PageHeader } from '@/components/custom'
 import FormCard from '@/components/custom/form/FormCard';
-import { Button } from '@/components/ui/button'
 import { useForm } from '@/hooks/useForm'
 import useStore from '@/store';
-import { PlusCircle } from 'lucide-react'
+import { Suspense } from 'react';
 import { useEffect } from 'react';
 
 function Forms() {
@@ -17,22 +16,20 @@ function Forms() {
     }, [data, setForms]);
 
     return (
-        <main className='p-3'>
+        <main className='py-3 px-4'>
             {/* header  */}
-            <PageHeader title={"Forms"}>
-                <Button>
-                    <PlusCircle />
-                    <span>Create Form</span>
-                </Button>
-            </PageHeader>
+            <PageHeader title={"My Forms"} />
             {/* content  */}
-            <section className='flex items-center flex-wrap gap-2 mt-3 mx-auto'>
-
-                {
-                    forms?.map((form) => {
-                        return <FormCard key={form._id} form={form} />
-                    })
-                }
+            <section className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-6 gap-4 py-3'>
+                {/* create new task */}
+                <CreateFormBtn />
+                <Suspense fallback={[1, 2, 3, 4].map((el) => <FormSkeleton key={el} />)}>
+                    {
+                        forms?.map((form) => {
+                            return <FormCard key={form._id} form={form} />
+                        })
+                    }
+                </Suspense>
             </section>
         </main>
     )
