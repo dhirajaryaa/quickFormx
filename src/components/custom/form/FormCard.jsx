@@ -11,7 +11,7 @@ function FormCard({ form }) {
             <CardHeader className={"gap-0"}>
                 <CardTitle className="flex items-center justify-between">
                     <span className="font-semibold line-clamp-1">{form.title}</span>
-                    {form.isDraft ? <Badge variant='destructive'>Draft</Badge> : <Badge className={'bg-green-200 dark:bg-green-400 text-green-900 dark:text-white'}>Public </Badge>}
+                    {form.isDraft ? <Badge className='bg-yellow-200 dark:bg-yellow-400 text-yellow-900 dark:text-white'>Draft</Badge> : <Badge className={'bg-green-200 dark:bg-green-400 text-green-900 dark:text-white'}>Public </Badge>}
                 </CardTitle>
                 <CardDescription className={'flex gap-2 text-xs items-center justify-between text-foreground/60 font-medium pt-2'}>
                     <p>{formatDate(form.updatedAt)}</p>
