@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { formatDate } from "@/lib/formatDate"
-import { ArrowRightIcon,View,Send } from "lucide-react"
+import { ArrowRightIcon, View, Send } from "lucide-react"
 
 function FormCard({ form }) {
 
@@ -11,7 +11,7 @@ function FormCard({ form }) {
             <CardHeader className={"gap-0"}>
                 <CardTitle className="flex items-center justify-between">
                     <span className="font-semibold line-clamp-1">{form.title}</span>
-                    {form.isDraft ? <Badge variant='destructive'>Draft</Badge> : <Badge>Public </Badge>}
+                    {form.isDraft ? <Badge variant='destructive'>Draft</Badge> : <Badge className={'bg-green-200 dark:bg-green-400 text-green-900 dark:text-white'}>Public </Badge>}
                 </CardTitle>
                 <CardDescription className={'flex gap-2 text-xs items-center justify-between text-foreground/60 font-medium pt-2'}>
                     <p>{formatDate(form.updatedAt)}</p>
