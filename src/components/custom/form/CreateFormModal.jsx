@@ -15,8 +15,10 @@ import { useForm } from 'react-hook-form';
 import { formModalSchema } from "@/schema/formModal.js"
 import { zodResolver } from '@hookform/resolvers/zod';
 import useStore from '@/store';
+import { useNavigate } from 'react-router';
 
 function CreateFormModal() {
+    const navigate = useNavigate()
     const { setCreateFormData } = useStore();
     const { register, formState: { errors }, handleSubmit, reset } = useForm({
         resolver: zodResolver(formModalSchema)
@@ -25,6 +27,8 @@ function CreateFormModal() {
         setCreateFormData(input);
         // clear form
         reset();
+        // navigate
+        navigate("/forms/create")
     };
 
     return (
