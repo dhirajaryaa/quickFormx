@@ -48,19 +48,18 @@ function NavItems() {
                 </SidebarMenu>
                 <SidebarMenu className={'mt-3'}>
                     {mainMenu.map((link) => (
-                        <SidebarMenuItem key={link.name} className={'mt-1'}>
+                        <SidebarMenuItem key={link.name}>
                             <Link to={link.href}>
                                 <SidebarMenuButton
                                     asChild
                                     tooltip={link.name}
-                                    className="py-5 font-medium text-base flex items-center gap-3 justify-start"
                                     isActive={pathname.startsWith(link.href)}
+                                    className={"text-sidebar-accent-foreground/80"}
                                 >
-                                    <span>
-                                        <span>
-                                            {link.icon}
-                                        </span>
-                                        {link.name}</span>
+                                    <span className="py-6 flex gap-4 text-[15px] px-3">
+                                        {link.icon}
+                                        {link.name}
+                                    </span>
                                 </SidebarMenuButton>
                             </Link>
                         </SidebarMenuItem>

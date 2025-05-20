@@ -3,10 +3,15 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import App from './App'
-import { Dashboard, LoginPage, NotFoundPage, RegisterPage } from './pages'
+import { LoginPage, NotFoundPage, RegisterPage } from './pages'
+import { lazy } from 'react'
+const Dashboard = lazy(() => import('@/pages/Dashboard'))
+const Forms = lazy(() => import('@/pages/form/Forms'))
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from './components/ui/sonner'
 import { getAuthUser } from './lib/authChecker'
+import { Suspense } from 'react'
+import { Loader2 } from 'lucide-react'
 
 const router = createBrowserRouter([
     { //* default page with auth
@@ -17,6 +22,10 @@ const router = createBrowserRouter([
             { //? default page with auth
                 path: "dashboard",
                 Component: Dashboard
+            },
+            { //? form page with auth
+                path: "forms",
+                Component: Forms
             }
         ]
     },
@@ -40,7 +49,11 @@ const queryClient = new QueryClient()
 createRoot(document.getElementById('root')).render(
     <StrictMode>
         <QueryClientProvider client={queryClient}>
-            <RouterProvider router={router} />
+            <Suspense fallback={
+                <div className='w-full h-screen flex items-center justify-center'><Loader2 className='size-10 animate-spin' /></div>
+                }>
+                <RouterProvider router={router} />
+            </Suspense>
             <Toaster />
         </QueryClientProvider>
     </StrictMode>,
