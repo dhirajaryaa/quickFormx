@@ -14,19 +14,18 @@ import { Textarea } from '@/components/ui/textarea';
 import { useForm } from 'react-hook-form';
 import { formModalSchema } from "@/schema/formModal.js"
 import { zodResolver } from '@hookform/resolvers/zod';
+import useStore from '@/store';
 
 function CreateFormModal() {
-    const { register, formState: { errors }, handleSubmit,reset } = useForm({
-        defaultValues:{
-            title:"",
-            description:""
-        },
+    const { setCreateFormData } = useStore();
+    const { register, formState: { errors }, handleSubmit, reset } = useForm({
         resolver: zodResolver(formModalSchema)
     });
-    function createFormHandler(userInput) {
+    function createFormHandler(input) {
+        setCreateFormData(input);
         // clear form
-        reset()
-    }
+        reset();
+    };
 
     return (
         <Dialog>

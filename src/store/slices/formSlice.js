@@ -1,7 +1,13 @@
+
 const createFormSlice = (set) => ({
     forms: [],
     activeForm: null,
+    createForm: {
+        title: "",
+        description: ""
+    },
     setForms: (forms) => set(() => ({ forms })),
-    setActiveForm: (from) => set(() => ({ activeForm: form }))
+    setActiveForm: (form) => set(() => ({ activeForm: form })),
+    setCreateFormData: (data) => set((prev) => ({ createForm: { ...prev.createForm, ...data } }))
 });
 export default createFormSlice;

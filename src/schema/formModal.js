@@ -6,7 +6,6 @@ export const formTitleSchema = z
     .max(60, "Title can't be more than 60 characters");
 
 export const formDescriptionSchema = z.string()
-    .min(6, "Description must be at least 6 characters long")
     .max(300, "Description can't be more than 300 characters")
     .optional();
 
