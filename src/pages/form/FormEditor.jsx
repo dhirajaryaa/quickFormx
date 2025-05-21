@@ -1,14 +1,125 @@
-import { EditorSidebar, FormCanvas } from "@/components/custom"
-import useStore from "@/store"
+import {
+    Type,
+    AlignLeft,
+    Hash,
+    Mail,
+    Lock,
+    List,
+    CheckSquare,
+    Calendar,
+    Upload,
+    CircleDot,
+    Link,
+    Image
+} from 'lucide-react';
+import { EditorSidebar, FormCanvas, PageHeader } from "@/components/custom"
+import { closestCorners, DndContext } from "@dnd-kit/core"
+import { useState } from 'react';
 
 function FormEditor() {
-    // const { createForm } = useStore()
+    const allElements = [
+        {
+            id: 1,
+            type: "text",
+            icon: Type,
+        },
+        {
+            id: 2,
+            type: "textarea",
+            icon: AlignLeft,
+        },
+        {
+            id: 3,
+            type: "number",
+            icon: Hash,
+        },
+        {
+            id: 4,
+            type: "email",
+            icon: Mail,
+        },
+        {
+            id: 5,
+            type: "password",
+            icon: Lock,
+        },
+        {
+            id: 6,
+            type: "select",
+            icon: List,
+        },
+        {
+            id: 7,
+            type: "checkbox",
+            icon: CheckSquare,
+        },
+        {
+            id: 8,
+            type: "radio",
+            icon: CircleDot,
+        },
+        {
+            id: 9,
+            type: "date",
+            icon: Calendar,
+        },
+        {
+            id: 10,
+            type: "file",
+            icon: Upload,
+        },
+        {
+            id: 11,
+            type: "url",
+            icon: Link,
+        },
+        {
+            id: 12,
+            type: "image",
+            icon: Image,
+        },
+    ];
+    const [selectedElements, setSelectedElements] = useState([
+        {
+            id: 1,
+            type: "text",
+            label: "Name",
+            placeholder: "enter your name",
+            required: true
+        },
+        {
+            id: 2,
+            type: "email",
+            label: "Email",
+            placeholder: "enter your email",
+            required: true
+        },
+    ]);
+
+    function handleDragEnd(event) {
+        const { active, over } = event;
+        // console.log("active",active);
+        // console.log("over",over);
+        if (!over) return;
+
+        if (over.id === "canvas") {
+            console.log(active);
+
+        }
+
+    }
+
     return (
-        <main className="p-3 grid gap-3 h-full grid-cols-1 sm:grid-cols-4">
-            {/* canvas */}
-            <FormCanvas />
-            {/* editor */}
-            <EditorSidebar />
+        <main className="p-3">
+            <PageHeader title={"Create Form"} />
+            <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
+                <div className=" grid gap-3 h-[86vh] grid-cols-1 sm:grid-cols-4 mt-3">
+                    {/* canvas */}
+                    <FormCanvas elements={selectedElements} />
+                    {/* editor */}
+                    <EditorSidebar elements={allElements} />
+                </div>
+            </DndContext>
         </main>
     )
 }
