@@ -9,6 +9,8 @@ import ReportCard from "./ReportCard";
 import CreateFormModal from "./form/CreateFormModal";
 import FormCard from "./form/FormCard";
 import FormSkeleton from "./form/FormSkeleton";
+import FormCanvas from "./form/editor/FormCanvas";
+import EditorSidebar from "./form/editor/EditorSidebar";
 
 export {
     AppSidebar,
@@ -21,5 +23,7 @@ export {
     ReportCard,
     CreateFormModal,
     FormCard,
-    FormSkeleton
+    FormSkeleton,
+    FormCanvas,
+    EditorSidebar
 }
