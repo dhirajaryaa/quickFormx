@@ -1,22 +1,8 @@
-import { useDndMonitor } from '@dnd-kit/core'
-import ElementOverlay from './ElementOverlay';
-import { useState } from 'react';
+import ElementOverlay from "./ElementOverlay"
 
-function DragOverWrapper({ elements }) {
-    const [activeBtn, setActiveBtn] = useState(null)
-    useDndMonitor({
-        onDragStart({ active }) {
-            console.log("drag start: ", active); // This should not be null
-        },
-        onDragOver({ active }) {
-            setActiveBtn(elements.find(el => el.type === active.id))
-        },
-        onDragCancel(element) {
-            setActiveBtn(null)
-        }
-    });
+function DragOverWrapper({ element }) {
     return (
-        <ElementOverlay element={activeBtn} />
+        <ElementOverlay element={element} />
     )
 }
 export default DragOverWrapper

@@ -13,73 +13,26 @@ import {
     Image
 } from 'lucide-react';
 import { EditorSidebar, FormCanvas, PageHeader } from "@/components/custom"
-import { closestCorners, DndContext, DragOverlay } from "@dnd-kit/core"
+import { DndContext, DragOverlay } from "@dnd-kit/core"
 import { useState } from 'react';
 import DragOverWrapper from '@/components/custom/form/editor/DragOverWrapper';
 
 function FormEditor() {
-    const allElements = [
-        {
-            id: 1,
-            type: "text",
-            icon: Type,
-        },
-        {
-            id: 2,
-            type: "textarea",
-            icon: AlignLeft,
-        },
-        {
-            id: 3,
-            type: "number",
-            icon: Hash,
-        },
-        {
-            id: 4,
-            type: "email",
-            icon: Mail,
-        },
-        {
-            id: 5,
-            type: "password",
-            icon: Lock,
-        },
-        {
-            id: 6,
-            type: "select",
-            icon: List,
-        },
-        {
-            id: 7,
-            type: "checkbox",
-            icon: CheckSquare,
-        },
-        {
-            id: 8,
-            type: "radio",
-            icon: CircleDot,
-        },
-        {
-            id: 9,
-            type: "date",
-            icon: Calendar,
-        },
-        {
-            id: 10,
-            type: "file",
-            icon: Upload,
-        },
-        {
-            id: 11,
-            type: "url",
-            icon: Link,
-        },
-        {
-            id: 12,
-            type: "image",
-            icon: Image,
-        },
-    ];
+   const allElements = [
+    { type: "text", icon: Type },
+    { type: "textarea", icon: AlignLeft },
+    { type: "number", icon: Hash },
+    { type: "email", icon: Mail },
+    { type: "password", icon: Lock },
+    { type: "select", icon: List },
+    { type: "checkbox", icon: CheckSquare },
+    { type: "radio", icon: CircleDot },
+    { type: "date", icon: Calendar },
+    { type: "file", icon: Upload },
+    { type: "url", icon: Link },
+    { type: "image", icon: Image },
+];
+
     const [selectedElements, setSelectedElements] = useState([
         {
             id: 1,
@@ -96,7 +49,7 @@ function FormEditor() {
             required: true
         },
     ]);
-
+    // handle new selected element add on form canvas
     function handleFn(event) {
         const { active, over } = event;
 
@@ -116,19 +69,18 @@ function FormEditor() {
                 ]);
             }
         }
-
-        setActiveId(null);
     }
-
-    const [activeId, setActiveId] = useState(null);
+    // handle new selected element preview
+    const [activeBtn, setActiveBtn] = useState(null);
+    function handleActiveElement({ active }) {
+        setActiveBtn(active.data?.current?.element)
+    }
 
     return (
         <main className="p-3">
             <PageHeader title={"Create Form"} />
             <DndContext
-                onDragStart={(event) => {
-                    setActiveId(event.active.id);
-                }}
+                onDragStart={handleActiveElement}
                 onDragEnd={handleFn} >
                 <div className=" grid gap-3 h-[86vh] grid-cols-1 sm:grid-cols-4 mt-3">
                     {/* canvas */}
@@ -138,7 +90,7 @@ function FormEditor() {
                 </div>
                 {/* overlay  */}
                 <DragOverlay>
-                    <DragOverWrapper elements={allElements} />
+                    <DragOverWrapper element={activeBtn} />
                 </DragOverlay>
             </DndContext>
         </main>
