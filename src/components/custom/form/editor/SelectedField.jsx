@@ -3,7 +3,6 @@ import { Label } from '@/components/ui/label';
 import React from 'react'
 
 function SelectedField({ field }) {
-    console.log(field);
 
     return (
         <div className='flex flex-col gap-2'>

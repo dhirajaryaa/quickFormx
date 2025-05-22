@@ -5,11 +5,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
-import { SortableContext } from "@dnd-kit/sortable";
 import SelectedField from "./SelectedField";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 function FormCanvas({ elements }) {
     const { createForm } = useStore();
+
     const { register, formState: { errors }, handleSubmit } = useForm({
         defaultValues: {
             "title": "Order Product",
@@ -48,45 +49,55 @@ function FormCanvas({ elements }) {
     });
 
     // dnd
-    const { setNodeRef } = useDroppable({ id: "canvas" })
+    const { setNodeRef, isOver } = useDroppable({
+        id: 'canvas',
+        data: {
+            isCanvas: true
+        }
+    });
+
+
     return (
         <section className='bg-muted border p-3 col-span-3 rounded-lg shadow-lg h-full'>
-            <form onSubmit={handleSubmit} className="grid gap-3" ref={setNodeRef}>
-                {/* heading  */}
-                <h2 className="text-xl font-semibold text-center ">Drag and Drop Here</h2>
-                <Separator />
-                {/* for title  */}
-                <div className="grid gap-2">
-                    <Label htmlFor="title" className={'ml-1'}>Title</Label>
-                    <Input
-                        id="title"
-                        className={"font-semibold bg-background"}
-                        {...register("title")}
-                    />
-                </div>
-                {/* for description  */}
-                <div className="grid gap-2">
-                    <Label htmlFor="description" className={'ml-1'}>Description</Label>
-                    <Textarea
-                        id="description"
-                        className={"h-26 resize-none bg-background"}
-                        {...register("description")}
-                    />
-                </div>
-                {/* field heading  */}
-                 <h3 className="text-xl font-semibold text-center ">Fields</h3>
-                <Separator />
-                {/* for dnd fields  */}
-                <SortableContext items={elements}>
-                    <div className="w-full grid gap-3 ">
+            <ScrollArea className="h-[84vh]">
+                <form onSubmit={handleSubmit} className="grid gap-3" >
+                    {/* heading  */}
+                    <h2 className="text-xl font-semibold text-center ">Drag and Drop Here</h2>
+                    <Separator />
+                    {/* for title  */}
+                    <div className="grid gap-2">
+                        <Label htmlFor="title" className={'ml-1'}>Title</Label>
+                        <Input
+                            id="title"
+                            className={"font-semibold bg-background"}
+                            {...register("title")}
+                        />
+                    </div>
+                    {/* for description  */}
+                    <div className="grid gap-2">
+                        <Label htmlFor="description" className={'ml-1'}>Description</Label>
+                        <Textarea
+                            id="description"
+                            className={"h-26 resize-none bg-background"}
+                            {...register("description")}
+                        />
+                    </div>
+                    {/* field heading  */}
+                    <h3 className="text-xl font-semibold text-center ">Fields</h3>
+                    <Separator />
+                    {/* for dnd fields  */}
+                    <div className="w-full grid gap-3"  ref={setNodeRef}>
                         {
                             elements.map((field) =>
                                 <SelectedField key={field.id} field={field} />
                             )
                         }
+                        {
+                            isOver && <div className="bg-gradient-to-b from-background to-gray-300 w-full h-18 border font-semibold bg-to rounded-lg flex items-center justify-center">Drop here</div>
+                        }
                     </div>
-                </SortableContext>
-            </form>
+                </form>
+            </ScrollArea>
         </section>
     )
 }
