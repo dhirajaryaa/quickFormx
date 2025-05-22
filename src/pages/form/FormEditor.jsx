@@ -18,58 +18,20 @@ import { useState } from 'react';
 import DragOverWrapper from '@/components/custom/form/editor/DragOverWrapper';
 
 function FormEditor() {
-   const allElements = [
-    { type: "text", icon: Type },
-    { type: "textarea", icon: AlignLeft },
-    { type: "number", icon: Hash },
-    { type: "email", icon: Mail },
-    { type: "password", icon: Lock },
-    { type: "select", icon: List },
-    { type: "checkbox", icon: CheckSquare },
-    { type: "radio", icon: CircleDot },
-    { type: "date", icon: Calendar },
-    { type: "file", icon: Upload },
-    { type: "url", icon: Link },
-    { type: "image", icon: Image },
-];
-
-    const [selectedElements, setSelectedElements] = useState([
-        {
-            id: 1,
-            type: "text",
-            label: "Name",
-            placeholder: "enter your name",
-            required: true
-        },
-        {
-            id: 2,
-            type: "email",
-            label: "Email",
-            placeholder: "enter your email",
-            required: true
-        },
-    ]);
-    // handle new selected element add on form canvas
-    function handleFn(event) {
-        const { active, over } = event;
-
-        if (over && over.id === "canvas") {
-            const newInput = allElements.find(el => el.type === active.id);
-
-            if (newInput) {
-                setSelectedElements((prev) => [
-                    ...prev,
-                    {
-                        id: Date.now(),
-                        type: active.id,
-                        label: `Name-${active.id}`,
-                        placeholder: "enter your name",
-                        required: true
-                    }
-                ]);
-            }
-        }
-    }
+    const allElements = [
+        { type: "text", icon: Type },
+        { type: "textarea", icon: AlignLeft },
+        { type: "number", icon: Hash },
+        { type: "email", icon: Mail },
+        { type: "password", icon: Lock },
+        { type: "select", icon: List },
+        { type: "checkbox", icon: CheckSquare },
+        { type: "radio", icon: CircleDot },
+        { type: "date", icon: Calendar },
+        { type: "file", icon: Upload },
+        { type: "url", icon: Link },
+        { type: "image", icon: Image },
+    ];
     // handle new selected element preview
     const [activeBtn, setActiveBtn] = useState(null);
     function handleActiveElement({ active }) {
@@ -80,11 +42,10 @@ function FormEditor() {
         <main className="p-3">
             <PageHeader title={"Create Form"} />
             <DndContext
-                onDragStart={handleActiveElement}
-                onDragEnd={handleFn} >
+                onDragStart={handleActiveElement}>
                 <div className=" grid gap-3 h-[86vh] grid-cols-1 sm:grid-cols-4 mt-3">
                     {/* canvas */}
-                    <FormCanvas elements={selectedElements} />
+                    <FormCanvas allElements={allElements} />
                     {/* editor */}
                     <EditorSidebar elements={allElements} />
                 </div>

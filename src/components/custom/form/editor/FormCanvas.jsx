@@ -1,6 +1,6 @@
-import { closestCorners, DndContext, useDroppable } from "@dnd-kit/core"
+import { useDndMonitor, useDroppable } from "@dnd-kit/core"
 import useStore from "@/store"
-import { useForm } from "react-hook-form"
+import { useFieldArray, useForm } from "react-hook-form"
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,45 +8,53 @@ import { Separator } from "@/components/ui/separator";
 import SelectedField from "./SelectedField";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-function FormCanvas({ elements }) {
+function FormCanvas({ allElements }) {
     const { createForm } = useStore();
-
-    const { register, formState: { errors }, handleSubmit } = useForm({
+    // form hook
+    const { register, formState: { errors }, handleSubmit, control } = useForm({
         defaultValues: {
-            "title": "Order Product",
-            "description": "Fill the form to order a product",
+            "title": createForm.title || "",
+            "description": createForm.description || "",
             "authUser": false,
             "isDraft": true,
-            "fields": [
-                {
-                    "label": "Customer Name",
-                    "name": "customerName",
-                    "type": "text"
-                },
-                {
-                    "label": "Shipping Address",
-                    "name": "address",
-                    "type": "textarea"
-                },
-                {
-                    "label": "Choose Product",
-                    "name": "product",
-                    "type": "select",
-                    "options": [
-                        { "value": "T-Shirt" },
-                        { "value": "Mug" },
-                        { "value": "Notebook" }
-                    ]
-                },
-                {
-                    "label": "Quantity",
-                    "name": "quantity",
-                    "type": "number"
-                }
-            ]
+            "fields": []
         }
 
     });
+    // use filed array to dynamic fields
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: "fields"
+    });
+    // update form fields
+    useDndMonitor({
+        onDragEnd(event) {
+            const { active, over } = event;
+            if (over && over.id === "canvas") {
+                const newInputType = allElements.find(el => el.type === active.id);
+                const newInput = {
+                    id: Date.now(),
+                    type: active.id,
+                    label: active.id,
+                    placeholder: "value here...",
+                    required: true
+                }
+                if (newInputType) {
+                    append(newInput);
+                    //     ...prev,
+                    //     {
+                    //         id: Date.now(),
+                    //         type: active.id,
+                    //         label: `${active.id}`,
+                    //         placeholder: "value here...",
+                    //         required: true
+                    //     }
+                    // ]);
+                }
+            }
+
+        }
+    })
 
     // dnd
     const { setNodeRef, isOver } = useDroppable({
@@ -56,17 +64,16 @@ function FormCanvas({ elements }) {
         }
     });
 
-
     return (
         <section className='bg-muted border p-3 col-span-3 rounded-lg shadow-lg h-full'>
             <ScrollArea className="h-[84vh]">
-                <form onSubmit={handleSubmit} className="grid gap-3" >
+                <form onSubmit={handleSubmit} className="grid gap-2" >
                     {/* heading  */}
                     <h2 className="text-xl font-semibold text-center ">Drag and Drop Here</h2>
                     <Separator />
                     {/* for title  */}
-                    <div className="grid gap-2">
-                        <Label htmlFor="title" className={'ml-1'}>Title</Label>
+                    <div className="grid gap-2 bg-background p-4 rounded-lg border">
+                        <Label htmlFor="title" className={'ml-1'}>Title <span className="text-destructive">*</span></Label>
                         <Input
                             id="title"
                             className={"font-semibold bg-background"}
@@ -74,21 +81,18 @@ function FormCanvas({ elements }) {
                         />
                     </div>
                     {/* for description  */}
-                    <div className="grid gap-2">
+                    <div className="grid gap-2 bg-background p-4 rounded-lg border">
                         <Label htmlFor="description" className={'ml-1'}>Description</Label>
                         <Textarea
                             id="description"
-                            className={"h-26 resize-none bg-background"}
+                            className={"h-19 resize-none"}
                             {...register("description")}
                         />
                     </div>
-                    {/* field heading  */}
-                    <h3 className="text-xl font-semibold text-center ">Fields</h3>
-                    <Separator />
                     {/* for dnd fields  */}
-                    <div className="w-full grid gap-3"  ref={setNodeRef}>
+                    <div className="w-full grid gap-2 min-h-8" ref={setNodeRef}>
                         {
-                            elements.map((field) =>
+                            fields?.map((field) =>
                                 <SelectedField key={field.id} field={field} />
                             )
                         }
