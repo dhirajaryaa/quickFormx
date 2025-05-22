@@ -4,7 +4,6 @@ import { useFieldArray, useForm } from "react-hook-form"
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Separator } from "@/components/ui/separator";
 import SelectedField from "./SelectedField";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -65,18 +64,16 @@ function FormCanvas({ allElements }) {
     });
 
     return (
-        <section className='bg-muted border p-3 col-span-3 rounded-lg shadow-lg h-full'>
+        <section className='bg-muted p-2 col-span-3 rounded-lg shadow-lg h-full'>
             <ScrollArea className="h-[84vh]">
                 <form onSubmit={handleSubmit} className="grid gap-2" >
-                    {/* heading  */}
-                    <h2 className="text-xl font-semibold text-center ">Drag and Drop Here</h2>
-                    <Separator />
                     {/* for title  */}
                     <div className="grid gap-2 bg-background p-4 rounded-lg border">
                         <Label htmlFor="title" className={'ml-1'}>Title <span className="text-destructive">*</span></Label>
                         <Input
                             id="title"
-                            className={"font-semibold bg-background"}
+                            className={"font-semibold"}
+                            placeholder="Enter Form Title here"
                             {...register("title")}
                         />
                     </div>
@@ -87,6 +84,7 @@ function FormCanvas({ allElements }) {
                             id="description"
                             className={"h-19 resize-none"}
                             {...register("description")}
+                            placeholder="Enter Form Description here"
                         />
                     </div>
                     {/* for dnd fields  */}

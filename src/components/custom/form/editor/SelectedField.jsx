@@ -3,7 +3,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 
 function SelectedField({ field }) {
-    const toTextField = ["text", "password", "email", "url", "number", "date"];
+    const toTextField = ["text", "password", "email", "url", "number", "date","file"];
     return (
         <div className="flex flex-col gap-2 bg-background p-3 rounded-lg border" >
             <Label>
