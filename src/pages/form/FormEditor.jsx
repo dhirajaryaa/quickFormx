@@ -13,8 +13,9 @@ import {
     Image
 } from 'lucide-react';
 import { EditorSidebar, FormCanvas, PageHeader } from "@/components/custom"
-import { closestCorners, DndContext } from "@dnd-kit/core"
+import { closestCorners, DndContext, DragOverlay } from "@dnd-kit/core"
 import { useState } from 'react';
+import DragOverWrapper from '@/components/custom/form/editor/DragOverWrapper';
 
 function FormEditor() {
     const allElements = [
@@ -96,29 +97,49 @@ function FormEditor() {
         },
     ]);
 
-    function handleDragEnd(event) {
+    function handleFn(event) {
         const { active, over } = event;
-        // console.log("active",active);
-        // console.log("over",over);
-        if (!over) return;
 
-        if (over.id === "canvas") {
-            console.log(active);
+        if (over && over.id === "canvas") {
+            const newInput = allElements.find(el => el.type === active.id);
 
+            if (newInput) {
+                setSelectedElements((prev) => [
+                    ...prev,
+                    {
+                        id: Date.now(),
+                        type: active.id,
+                        label: `Name-${active.id}`,
+                        placeholder: "enter your name",
+                        required: true
+                    }
+                ]);
+            }
         }
 
+        setActiveId(null);
     }
+
+    const [activeId, setActiveId] = useState(null);
 
     return (
         <main className="p-3">
             <PageHeader title={"Create Form"} />
-            <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
+            <DndContext
+                onDragStart={(event) => {
+                    setActiveId(event.active.id);
+                }}
+                onDragEnd={handleFn} >
                 <div className=" grid gap-3 h-[86vh] grid-cols-1 sm:grid-cols-4 mt-3">
                     {/* canvas */}
                     <FormCanvas elements={selectedElements} />
                     {/* editor */}
                     <EditorSidebar elements={allElements} />
                 </div>
+                {/* overlay  */}
+                <DragOverlay>
+                    <DragOverWrapper elements={allElements} />
+                </DragOverlay>
             </DndContext>
         </main>
     )
