@@ -14,14 +14,19 @@ import {
     SquarePen,
     ExternalLink
 } from 'lucide-react';
-import { EditorSidebar, FormCanvas, PageHeader,DragOverWrapper } from "@/components/custom"
+import { EditorSidebar, FormCanvas, PageHeader, DragOverWrapper } from "@/components/custom"
 import { DndContext, DragOverlay } from "@dnd-kit/core"
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import useStore from '@/store';
+import { useForm } from '@/hooks/useForm';
+import { toast } from 'sonner';
+import { useNavigate } from 'react-router';
 
 function FormEditor() {
-    const { isPreview, togglePreview } = useStore();
+    const { isPreview, togglePreview, createForm,setForms } = useStore();
+    const navigate = useNavigate();
+    const { createNewForm: { mutateAsync, isPending }} = useForm()
     const allElements = [
         { type: "text", icon: Type },
         { type: "textarea", icon: AlignLeft },
@@ -41,6 +46,18 @@ function FormEditor() {
         setActiveBtn(active.data?.current?.element)
     }
 
+    // handle form create
+    async function handleFormCreate() {
+        const updatedFields = createForm.fields.map((field) => ({ ...field, name: `${field.label.split(" ")[0].toLowerCase()}_${Date.now()}` }));
+        const res = await mutateAsync({ ...createForm, fields: updatedFields });
+        if (res.statusCode >= 400) { // error
+            toast.error(res.message);
+        } else { // success
+            setForms(res?.data);
+            navigate("/forms");
+        }
+    }
+
     return (
         <main className="p-3">
             <PageHeader title={"Create Form"} >
@@ -53,7 +70,7 @@ function FormEditor() {
                         }
                         <span className='sm:block hidden'>{!isPreview ? "Preview" : "Editor"}</span>
                     </Button>
-                    <Button type={'button'} size={'sm'}>
+                    <Button type={'button'} size={'sm'} onClick={handleFormCreate}>
                         <ExternalLink />
                         <span>Publish</span>
                     </Button>

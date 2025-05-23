@@ -1,5 +1,5 @@
-import { getForms } from "@/api/formApi"
-import { useQuery } from "@tanstack/react-query"
+import { createForm, getForms } from "@/api/formApi"
+import { useMutation, useQuery } from "@tanstack/react-query"
 
 export const useForm = () => {
     // get all form
@@ -7,8 +7,13 @@ export const useForm = () => {
         queryKey: ["forms"],
         queryFn: getForms
     });
+    // create form
+    const createNewForm = useMutation({
+        mutationFn: createForm
+    })
 
     return {
-        getAllForm
+        getAllForm,
+        createNewForm
     }
 }

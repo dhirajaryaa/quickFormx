@@ -97,8 +97,8 @@ function SelectedField({ field, remove, index, move, isPreview, setActiveElement
                 <div className="flex space-x-2 min-h-10 flex-col gap-2">
                     {
                         !field.options.length > 0 ? "Add Properties" :
-                            field?.options?.map((el) => {
-                                return <div className='flex gap-2'>
+                            field?.options?.map((el, index) => {
+                                return <div className='flex gap-2' key={index}>
                                     <Checkbox id={el.toLowerCase()}
                                         readOnly={!isPreview}
                                         disabled={!isPreview} />

@@ -11,7 +11,18 @@ const getForms = async () => {
         return error?.response?.data
     }
 }
+const createForm = async (data) => {
+    console.log(data);
+
+    try {
+        const response = await axios.post(`${API_URL}/forms`,data);
+        return response.data;
+    } catch (error) {
+        return error?.response?.data
+    }
+}
 
 export {
-    getForms
+    getForms,
+    createForm
 }

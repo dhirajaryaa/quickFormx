@@ -8,10 +8,11 @@ import SelectedField from "./SelectedField";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import PropertiesEditor from "./PropertiesEditor";
 import { useState } from "react";
+import { useEffect } from "react";
 
 function FormCanvas({ allElements }) {
     const [activeElement, setActiveElement] = useState(null);
-    const { isPreview, createForm } = useStore();
+    const { isPreview, createForm ,setCreateFormFields} = useStore();
     // form hook
     const { register, formState: { errors }, handleSubmit, control } = useForm({
         defaultValues: {
@@ -57,6 +58,10 @@ function FormCanvas({ allElements }) {
             isCanvas: true
         }
     });
+
+    useEffect(()=>{
+        setCreateFormFields(fields)
+    },[fields])
 
     return (
         <section className={`bg-muted p-2 rounded-lg shadow-lg h-full flex-1 ${isPreview ? "sm:max-w-2xl" : "w-full"}`}>
