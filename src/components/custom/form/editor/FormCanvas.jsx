@@ -6,8 +6,11 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import SelectedField from "./SelectedField";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import PropertiesEditor from "./PropertiesEditor";
+import { useState } from "react";
 
 function FormCanvas({ allElements }) {
+    const [activeElement, setActiveElement] = useState(null);
     const { isPreview, createForm } = useStore();
     // form hook
     const { register, formState: { errors }, handleSubmit, control } = useForm({
@@ -16,12 +19,12 @@ function FormCanvas({ allElements }) {
             "description": createForm.description || "",
             "authUser": false,
             "isDraft": true,
-            "fields": []
+            "fields": createForm.field || []
         }
 
     });
     // use filed array to dynamic fields
-    const { fields, append, remove, move } = useFieldArray({
+    const { fields, append, remove, move, update } = useFieldArray({
         control,
         name: "fields"
     });
@@ -36,7 +39,8 @@ function FormCanvas({ allElements }) {
                     type: active.id,
                     label: active.id,
                     placeholder: "value here...",
-                    required: true
+                    required: true,
+                    options: []
                 }
                 if (newInputType) {
                     append(newInput);
@@ -53,9 +57,11 @@ function FormCanvas({ allElements }) {
             isCanvas: true
         }
     });
+    console.log(fields);
+    
 
     return (
-        <section className={`bg-muted p-2 rounded-lg shadow-lg h-full flex-1 ${isPreview ? "sm:max-w-2xl":"w-full"}`}>
+        <section className={`bg-muted p-2 rounded-lg shadow-lg h-full flex-1 ${isPreview ? "sm:max-w-2xl" : "w-full"}`}>
             <ScrollArea className="h-[84vh]">
                 <form onSubmit={handleSubmit} className="grid gap-2" >
                     {/* for title  */}
@@ -89,6 +95,7 @@ function FormCanvas({ allElements }) {
                                     index={index}
                                     move={move}
                                     isPreview={isPreview}
+                                    setActiveElement={setActiveElement}
                                 />
                             )
                         }
@@ -98,6 +105,12 @@ function FormCanvas({ allElements }) {
                     </div>
                 </form>
             </ScrollArea>
+            {/* for PropertiesEditor  */}
+            <PropertiesEditor
+                activeElement={activeElement}
+                update={update}
+                setActiveElement={setActiveElement}
+            />
         </section>
     )
 }

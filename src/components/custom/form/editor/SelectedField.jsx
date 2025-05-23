@@ -2,22 +2,26 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { ArrowUp } from 'lucide-react';
-import { Trash2 } from 'lucide-react';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Trash2, ArrowUp } from 'lucide-react';
 import {
     Select,
     SelectContent,
     SelectGroup,
     SelectItem,
-    SelectLabel,
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
 import { Checkbox } from '@/components/ui/checkbox';
 
-function SelectedField({ field, remove, index, move, isPreview }) {
+function SelectedField({ field, remove, index, move, isPreview, setActiveElement }) {
     const toTextField = ["text", "password", "email", "url", "number", "date", "file"];
+
+    function handleActiveElement() {
+        if(!isPreview){
+            setActiveElement({ ...field, index })
+        }
+    }
 
     const handleMoveUp = () => {
         if (index > 0) {
@@ -26,7 +30,7 @@ function SelectedField({ field, remove, index, move, isPreview }) {
     };
 
     return (
-        <div className="group flex relative flex-col gap-2 bg-background p-3 rounded-lg border text-sm" >
+        <div className="group flex relative flex-col gap-2 bg-background p-3 rounded-lg border text-sm" onClick={handleActiveElement} >
             <Label className={'capitalize'}>
                 {field.label}
                 {field.required && <span className="text-destructive">*</span>}
@@ -108,14 +112,32 @@ function SelectedField({ field, remove, index, move, isPreview }) {
                 </div>
             }
             {/* toolbox  */}
-            <div className='bg-gradient-to-l to-background/10 from-destructive/40 w-23 h-full opacity-0 group-hover:opacity-100 absolute right-1 top-0 px-5 py-2 flex flex-col gap-1 justify-between items-end pr-2 transition-all duration-150 rounded-r-lg'>
-                <Button type="button" size={'sm'} className={'w-8'} onClick={handleMoveUp} disabled={index === 0}>
-                    <ArrowUp />
-                </Button>
-                <Button type="button" className={'w-8'} size={'sm'} variant={'destructive'} onClick={() => remove(index)}>
-                    <Trash2 />
-                </Button>
-            </div>
+            {
+                !isPreview &&
+                <div className='bg-gradient-to-l to-background/10 from-destructive/40 w-23 h-full opacity-0 group-hover:opacity-100 absolute right-1 top-0 px-5 py-2 flex flex-col gap-1 justify-between items-end pr-2 transition-all duration-150 rounded-r-lg'>
+                    <Button
+                        type="button"
+                        size={'sm'}
+                        className={'w-8'}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleMoveUp();
+                        }}
+                        disabled={index === 0}>
+                        <ArrowUp />
+                    </Button>
+                    <Button type="button"
+                        className={'w-8'}
+                        size={'sm'}
+                        variant={'destructive'}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            remove(index);
+                        }}>
+                        <Trash2 />
+                    </Button>
+                </div>
+            }
         </div>
     )
 }

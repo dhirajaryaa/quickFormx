@@ -11,15 +11,14 @@ import {
     CircleDot,
     Link,
     View,
+    SquarePen,
     ExternalLink
 } from 'lucide-react';
-import { EditorSidebar, FormCanvas, PageHeader } from "@/components/custom"
+import { EditorSidebar, FormCanvas, PageHeader,DragOverWrapper } from "@/components/custom"
 import { DndContext, DragOverlay } from "@dnd-kit/core"
-import { useState } from 'react';
-import DragOverWrapper from '@/components/custom/form/editor/DragOverWrapper';
 import { Button } from '@/components/ui/button';
+import { useState } from 'react';
 import useStore from '@/store';
-import { SquarePen } from 'lucide-react';
 
 function FormEditor() {
     const { isPreview, togglePreview } = useStore();

@@ -11,6 +11,7 @@ import FormCard from "./form/FormCard";
 import FormSkeleton from "./form/FormSkeleton";
 import FormCanvas from "./form/editor/FormCanvas";
 import EditorSidebar from "./form/editor/EditorSidebar";
+import DragOverWrapper from "./form/editor/DragOverWrapper";
 
 export {
     AppSidebar,
@@ -25,5 +26,6 @@ export {
     FormCard,
     FormSkeleton,
     FormCanvas,
-    EditorSidebar
+    EditorSidebar,
+    DragOverWrapper
 }
