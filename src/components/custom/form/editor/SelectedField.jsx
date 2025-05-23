@@ -18,7 +18,7 @@ function SelectedField({ field, remove, index, move, isPreview, setActiveElement
     const toTextField = ["text", "password", "email", "url", "number", "date", "file"];
 
     function handleActiveElement() {
-        if(!isPreview){
+        if (!isPreview) {
             setActiveElement({ ...field, index })
         }
     }
@@ -62,18 +62,15 @@ function SelectedField({ field, remove, index, move, isPreview, setActiveElement
                     readOnly={!isPreview}
                     className={'text-sm'}
                     disabled={!isPreview}>
-                    <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="default" id="r1" />
-                        <Label htmlFor="r1">Default</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="comfortable" id="r2" />
-                        <Label htmlFor="r2">Comfortable</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="compact" id="r3" />
-                        <Label htmlFor="r3">Compact</Label>
-                    </div>
+                    {
+                        !field.options.length > 0 ? "Add Properties" :
+                            field?.options?.map((el) => {
+                                return <div className="flex items-center space-x-2">
+                                    <RadioGroupItem value={el.toLowerCase()} id={field.id} />
+                                    <Label htmlFor={field.id}>{el}</Label>
+                                </div>
+                            })
+                    }
                 </RadioGroup>
             }
             {/* for select  */}
@@ -86,29 +83,34 @@ function SelectedField({ field, remove, index, move, isPreview, setActiveElement
                         <SelectValue placeholder={field.placeholder} />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectGroup>
-                            <SelectItem value="apple">Apple</SelectItem>
-                            <SelectItem value="banana">Banana</SelectItem>
-                            <SelectItem value="blueberry">Blueberry</SelectItem>
-                            <SelectItem value="grapes">Grapes</SelectItem>
-                            <SelectItem value="pineapple">Pineapple</SelectItem>
-                        </SelectGroup>
+                        {
+                            field?.options?.map((el) => {
+                                return <SelectItem value={el} className={"capitalize"}>{el}</SelectItem>
+                            })
+                        }
                     </SelectContent>
                 </Select>
             }
             {/* for checkbox  */}
             {
                 field.type === "checkbox" &&
-                <div className="flex items-center space-x-2 min-h-10">
-                    <Checkbox id="terms"
-                        readOnly={!isPreview}
-                        disabled={!isPreview} />
-                    <label
-                        htmlFor="terms"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                        Accept terms and conditions
-                    </label>
+                <div className="flex space-x-2 min-h-10 flex-col gap-2">
+                    {
+                        !field.options.length > 0 ? "Add Properties" :
+                            field?.options?.map((el) => {
+                                return <div className='flex gap-2'>
+                                    <Checkbox id={el.toLowerCase()}
+                                        readOnly={!isPreview}
+                                        disabled={!isPreview} />
+                                    <label
+                                        htmlFor={el.toLowerCase()}
+                                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 capitalize"
+                                    >
+                                        {el}
+                                    </label>
+                                </div>
+                            })
+                    }
                 </div>
             }
             {/* toolbox  */}

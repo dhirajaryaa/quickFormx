@@ -37,7 +37,10 @@ function PropertiesEditor({ activeElement, update, setActiveElement }) {
 
     useEffect(() => {
         if (isEditable && activeElement) {
-            setFormState({ ...activeElement });
+            setFormState({
+                ...activeElement,
+                options: activeElement.options || [],
+            });
             setOpen(true);
         } else {
             setOpen(false);
@@ -55,7 +58,6 @@ function PropertiesEditor({ activeElement, update, setActiveElement }) {
         setActiveElement(null);
     };
 
-
     if (!isEditable) return null;
 
     return (
@@ -69,34 +71,79 @@ function PropertiesEditor({ activeElement, update, setActiveElement }) {
                 </SheetHeader>
 
                 <div className="grid gap-4 p-4">
+                    {/* Label */}
                     <div className="grid items-center gap-1">
-                        <Label htmlFor="label" className="text-right">Label</Label>
+                        <Label htmlFor="label">Label</Label>
                         <Input
                             id="label"
                             value={formState.label || ""}
-                                   className={'text-sm'}
+                            className="text-sm"
                             onChange={(e) => handleChange("label", e.target.value)}
                         />
                     </div>
 
+                    {/* Placeholder */}
                     <div className="grid items-center gap-1">
-                        <Label htmlFor="placeholder" className="text-right">Placeholder</Label>
+                        <Label htmlFor="placeholder">Placeholder</Label>
                         <Input
                             id="placeholder"
                             value={formState.placeholder || ""}
-                            className={'text-sm'}
+                            className="text-sm"
                             onChange={(e) => handleChange("placeholder", e.target.value)}
                         />
                     </div>
 
-                    <div className="flex justify-between items-center px-3 gap-4 text-sm">
-                        <Label htmlFor="required" className="text-right">Required</Label>
+                    {/* Required */}
+                    <div className="flex justify-between items-center gap-4 text-sm">
+                        <Label htmlFor="required">Required</Label>
                         <Switch
                             id="required"
                             checked={formState.required || false}
                             onCheckedChange={(checked) => handleChange("required", checked)}
                         />
                     </div>
+
+                    {/* Options (only for radio, select, checkbox) */}
+                    {["radio", "select", "checkbox"].includes(formState.type) && (
+                        <div className="grid gap-2">
+                            <Label>Options</Label>
+                            {formState.options?.map((opt, idx) => (
+                                <div key={idx} className="flex items-center gap-2">
+                                    <Input
+                                        value={opt}
+                                        onChange={(e) => {
+                                            const updatedOptions = [...formState.options];
+                                            updatedOptions[idx] = e.target.value;
+                                            handleChange("options", updatedOptions);
+                                        }}
+                                        className="text-sm"
+                                    />
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        variant="destructive"
+                                        onClick={() => {
+                                            const updatedOptions = formState.options.filter((_, i) => i !== idx);
+                                            handleChange("options", updatedOptions);
+                                        }}
+                                    >
+                                        Remove
+                                    </Button>
+                                </div>
+                            ))}
+
+                            <Button
+                                type="button"
+                                size="sm"
+                                variant="outline"
+                                onClick={() =>
+                                    handleChange("options", [...(formState.options || []), ""])
+                                }
+                            >
+                                Add Option
+                            </Button>
+                        </div>
+                    )}
                 </div>
 
                 <SheetFooter>

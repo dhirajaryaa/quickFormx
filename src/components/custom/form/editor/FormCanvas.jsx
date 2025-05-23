@@ -57,8 +57,6 @@ function FormCanvas({ allElements }) {
             isCanvas: true
         }
     });
-    console.log(fields);
-    
 
     return (
         <section className={`bg-muted p-2 rounded-lg shadow-lg h-full flex-1 ${isPreview ? "sm:max-w-2xl" : "w-full"}`}>
