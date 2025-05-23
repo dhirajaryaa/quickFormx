@@ -8,7 +8,7 @@ import SelectedField from "./SelectedField";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 function FormCanvas({ allElements }) {
-    const { createForm } = useStore();
+    const { isPreview, createForm } = useStore();
     // form hook
     const { register, formState: { errors }, handleSubmit, control } = useForm({
         defaultValues: {
@@ -21,7 +21,7 @@ function FormCanvas({ allElements }) {
 
     });
     // use filed array to dynamic fields
-    const { fields, append, remove } = useFieldArray({
+    const { fields, append, remove,move } = useFieldArray({
         control,
         name: "fields"
     });
@@ -40,15 +40,6 @@ function FormCanvas({ allElements }) {
                 }
                 if (newInputType) {
                     append(newInput);
-                    //     ...prev,
-                    //     {
-                    //         id: Date.now(),
-                    //         type: active.id,
-                    //         label: `${active.id}`,
-                    //         placeholder: "value here...",
-                    //         required: true
-                    //     }
-                    // ]);
                 }
             }
 
@@ -64,7 +55,7 @@ function FormCanvas({ allElements }) {
     });
 
     return (
-        <section className='bg-muted p-2 col-span-3 rounded-lg shadow-lg h-full'>
+        <section className='bg-muted p-2 flex-1 sm:max-w-4xl rounded-lg shadow-lg h-full'>
             <ScrollArea className="h-[84vh]">
                 <form onSubmit={handleSubmit} className="grid gap-2" >
                     {/* for title  */}
@@ -90,8 +81,15 @@ function FormCanvas({ allElements }) {
                     {/* for dnd fields  */}
                     <div className="w-full grid gap-2 min-h-8" ref={setNodeRef}>
                         {
-                            fields?.map((field) =>
-                                <SelectedField key={field.id} field={field} />
+                            fields?.map((field,index) =>
+                                <SelectedField
+                             key={field.id}
+                              field={field}
+                              remove={remove}
+                              index={index}
+                              move={move}
+                              isPreview={isPreview}
+                              />
                             )
                         }
                         {

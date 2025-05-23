@@ -10,14 +10,19 @@ import {
     Upload,
     CircleDot,
     Link,
-    Image
+    View,
+    ExternalLink
 } from 'lucide-react';
 import { EditorSidebar, FormCanvas, PageHeader } from "@/components/custom"
 import { DndContext, DragOverlay } from "@dnd-kit/core"
 import { useState } from 'react';
 import DragOverWrapper from '@/components/custom/form/editor/DragOverWrapper';
+import { Button } from '@/components/ui/button';
+import useStore from '@/store';
+import { SquarePen } from 'lucide-react';
 
 function FormEditor() {
+    const { isPreview, togglePreview } = useStore();
     const allElements = [
         { type: "text", icon: Type },
         { type: "textarea", icon: AlignLeft },
@@ -29,8 +34,7 @@ function FormEditor() {
         { type: "radio", icon: CircleDot },
         { type: "date", icon: Calendar },
         { type: "file", icon: Upload },
-        { type: "url", icon: Link },
-        { type: "image", icon: Image },
+        { type: "url", icon: Link }
     ];
     // handle new selected element preview
     const [activeBtn, setActiveBtn] = useState(null);
@@ -40,14 +44,34 @@ function FormEditor() {
 
     return (
         <main className="p-3">
-            <PageHeader title={"Create Form"} />
+            <PageHeader title={"Create Form"} >
+                <div className='flex gap-2'>
+                    <Button type={'button'} variant={'outline'} onClick={togglePreview}>
+                        {
+                            !isPreview ?
+                            <View />:
+                            <SquarePen />
+                        }
+                        <span>{!isPreview ? "Preview":"Editor"}</span>
+                    </Button>
+                    <Button type={'button'}>
+                        <ExternalLink />
+                        <span>Publish</span>
+                    </Button>
+                </div>
+            </PageHeader>
             <DndContext
                 onDragStart={handleActiveElement}>
-                <div className=" grid gap-3 h-[86vh] grid-cols-1 sm:grid-cols-4 mt-3">
+                <div className="h-[86vh] flex gap-3 mt-3 items-center justify-center">
                     {/* canvas */}
                     <FormCanvas allElements={allElements} />
-                    {/* editor */}
-                    <EditorSidebar elements={allElements} />
+                    {
+                        !isPreview &&
+                        <>
+                            {/* editor */}
+                            <EditorSidebar elements={allElements} />
+                        </>
+                    }
                 </div>
                 {/* overlay  */}
                 <DragOverlay>
