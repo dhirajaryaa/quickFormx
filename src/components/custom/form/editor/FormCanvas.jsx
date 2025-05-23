@@ -55,7 +55,7 @@ function FormCanvas({ allElements }) {
     });
 
     return (
-        <section className='bg-muted p-2 rounded-lg shadow-lg h-full flex-1 w-full'>
+        <section className={`bg-muted p-2 rounded-lg shadow-lg h-full flex-1 ${isPreview ? "sm:max-w-2xl":"w-full"}`}>
             <ScrollArea className="h-[84vh]">
                 <form onSubmit={handleSubmit} className="grid gap-2" >
                     {/* for title  */}

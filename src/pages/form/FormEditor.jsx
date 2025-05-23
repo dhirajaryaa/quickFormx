@@ -46,15 +46,15 @@ function FormEditor() {
         <main className="p-3">
             <PageHeader title={"Create Form"} >
                 <div className='flex gap-2'>
-                    <Button type={'button'} variant={'outline'} onClick={togglePreview}>
+                    <Button type={'button'} variant={'outline'} onClick={togglePreview} size={'sm'}>
                         {
                             !isPreview ?
-                            <View />:
-                            <SquarePen />
+                                <View /> :
+                                <SquarePen />
                         }
-                        <span>{!isPreview ? "Preview":"Editor"}</span>
+                        <span className='sm:block hidden'>{!isPreview ? "Preview" : "Editor"}</span>
                     </Button>
-                    <Button type={'button'}>
+                    <Button type={'button'} size={'sm'}>
                         <ExternalLink />
                         <span>Publish</span>
                     </Button>
@@ -62,7 +62,7 @@ function FormEditor() {
             </PageHeader>
             <DndContext
                 onDragStart={handleActiveElement}>
-                <div className="sm:h-[86vh] flex gap-3 mt-3 items-center justify-between flex-col-reverse sm:flex-row">
+                <div className="sm:h-[86vh] flex gap-3 mt-3 items-center justify-center flex-col-reverse sm:flex-row">
                     {/* canvas */}
                     <FormCanvas allElements={allElements} />
                     {
