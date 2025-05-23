@@ -26,7 +26,7 @@ function SelectedField({ field, remove, index, move, isPreview }) {
     };
 
     return (
-        <div className="group flex relative flex-col gap-2 bg-background p-3 rounded-lg border" >
+        <div className="group flex relative flex-col gap-2 bg-background p-3 rounded-lg border text-sm" >
             <Label className={'capitalize'}>
                 {field.label}
                 {field.required && <span className="text-destructive">*</span>}
@@ -37,6 +37,7 @@ function SelectedField({ field, remove, index, move, isPreview }) {
                     type={field.type}
                     readOnly={!isPreview}
                     disabled={!isPreview}
+                    className={'text-sm'}
                     placeholder={field.placeholder}
                 />
             }
@@ -46,7 +47,7 @@ function SelectedField({ field, remove, index, move, isPreview }) {
                     type={field.type}
                     readOnly={!isPreview}
                     disabled={!isPreview}
-                    className={"resize-none h-18"}
+                    className={"resize-none h-18 text-sm"}
                     placeholder={field.placeholder}
                 />
             }
@@ -55,6 +56,7 @@ function SelectedField({ field, remove, index, move, isPreview }) {
                 field.type === 'radio' &&
                 <RadioGroup
                     readOnly={!isPreview}
+                    className={'text-sm'}
                     disabled={!isPreview}>
                     <div className="flex items-center space-x-2">
                         <RadioGroupItem value="default" id="r1" />
@@ -74,13 +76,13 @@ function SelectedField({ field, remove, index, move, isPreview }) {
             {field.type === "select" &&
                 <Select
                     readOnly={!isPreview}
-                    disabled={!isPreview} >
-                    <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select a fruit" />
+                    disabled={!isPreview}
+                >
+                    <SelectTrigger className="w-full text-sm">
+                        <SelectValue placeholder={field.placeholder} />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectGroup>
-                            <SelectLabel>Fruits</SelectLabel>
                             <SelectItem value="apple">Apple</SelectItem>
                             <SelectItem value="banana">Banana</SelectItem>
                             <SelectItem value="blueberry">Blueberry</SelectItem>

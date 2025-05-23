@@ -21,7 +21,7 @@ function FormCanvas({ allElements }) {
 
     });
     // use filed array to dynamic fields
-    const { fields, append, remove,move } = useFieldArray({
+    const { fields, append, remove, move } = useFieldArray({
         control,
         name: "fields"
     });
@@ -55,7 +55,7 @@ function FormCanvas({ allElements }) {
     });
 
     return (
-        <section className='bg-muted p-2 flex-1 sm:max-w-4xl rounded-lg shadow-lg h-full'>
+        <section className='bg-muted p-2 rounded-lg shadow-lg h-full flex-1 w-full'>
             <ScrollArea className="h-[84vh]">
                 <form onSubmit={handleSubmit} className="grid gap-2" >
                     {/* for title  */}
@@ -63,7 +63,7 @@ function FormCanvas({ allElements }) {
                         <Label htmlFor="title" className={'ml-1'}>Title <span className="text-destructive">*</span></Label>
                         <Input
                             id="title"
-                            className={"font-semibold"}
+                            className={"font-semibold text-sm"}
                             placeholder="Enter Form Title here"
                             {...register("title")}
                         />
@@ -73,23 +73,23 @@ function FormCanvas({ allElements }) {
                         <Label htmlFor="description" className={'ml-1'}>Description</Label>
                         <Textarea
                             id="description"
-                            className={"h-19 resize-none"}
+                            className={"h-19 resize-none text-sm"}
                             {...register("description")}
                             placeholder="Enter Form Description here"
                         />
                     </div>
                     {/* for dnd fields  */}
-                    <div className="w-full grid gap-2 min-h-8" ref={setNodeRef}>
+                    <div className="w-full grid gap-2 min-h-18 " ref={setNodeRef}>
                         {
-                            fields?.map((field,index) =>
+                            fields?.map((field, index) =>
                                 <SelectedField
-                             key={field.id}
-                              field={field}
-                              remove={remove}
-                              index={index}
-                              move={move}
-                              isPreview={isPreview}
-                              />
+                                    key={field.id}
+                                    field={field}
+                                    remove={remove}
+                                    index={index}
+                                    move={move}
+                                    isPreview={isPreview}
+                                />
                             )
                         }
                         {

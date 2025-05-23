@@ -62,7 +62,7 @@ function FormEditor() {
             </PageHeader>
             <DndContext
                 onDragStart={handleActiveElement}>
-                <div className="h-[86vh] flex gap-3 mt-3 items-center justify-center">
+                <div className="sm:h-[86vh] flex gap-3 mt-3 items-center justify-between flex-col-reverse sm:flex-row">
                     {/* canvas */}
                     <FormCanvas allElements={allElements} />
                     {
