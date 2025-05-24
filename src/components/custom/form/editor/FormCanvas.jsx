@@ -13,7 +13,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
 
-function FormCanvas({ allElements, formId }) {
+function FormCanvas({ allElements, formId,isDraft }) {
     const navigate = useNavigate();
     const [activeElement, setActiveElement] = useState(null);
     const { createNewForm: { mutateAsync, isPending }, getAllForm: { refetch } } = useFormHook()
@@ -26,7 +26,7 @@ function FormCanvas({ allElements, formId }) {
                 "title": createForm.title || "",
                 "description": createForm.description || "",
                 "authUser": false,
-                "isDraft": true,
+                "isDraft": isDraft ||true,
                 "fields": createForm.fields || []
             }
         });
@@ -66,7 +66,7 @@ function FormCanvas({ allElements, formId }) {
         const updatedFields = input.fields.map((field) => ({ ...field, name: `${field.label.split(" ")[0].toLowerCase()}_${Date.now()}` }));
         let res
         if(!inEditMode){
-            res = await mutateAsync({ ...input, fields: updatedFields });
+            res = await mutateAsync({ ...input, fields: updatedFields,isDraft });
         }
         if (res.statusCode >= 400) { // error
             toast.error(res.message);

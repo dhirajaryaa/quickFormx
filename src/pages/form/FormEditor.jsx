@@ -12,7 +12,8 @@ import {
     Link,
     View,
     SquarePen,
-    ExternalLink
+    ExternalLink,
+    Save
 } from 'lucide-react';
 import { EditorSidebar, FormCanvas, PageHeader, DragOverWrapper } from "@/components/custom"
 import { DndContext, DragOverlay } from "@dnd-kit/core"
@@ -26,6 +27,7 @@ import { useId } from 'react';
 
 function FormEditor() {
     const formId = useId()
+    const [isDraft,setIsDraft] = useState(true);
     const { isPreview, togglePreview } = useStore();
     const allElements = [
         { type: "text", icon: Type },
@@ -44,13 +46,13 @@ function FormEditor() {
     const [activeBtn, setActiveBtn] = useState(null);
     function handleActiveElement({ active }) {
         setActiveBtn(active.data?.current?.element)
-    }
+    };
 
     return (
         <main className="p-3">
             <PageHeader title={"Create Form"} >
                 <div className='flex gap-2'>
-                    <Button type={'button'} variant={'outline'} onClick={togglePreview} size={'sm'}>
+                    <Button type={'button'} variant={'secondary'} onClick={togglePreview} size={'sm'}>
                         {
                             !isPreview ?
                                 <View /> :
@@ -58,7 +60,11 @@ function FormEditor() {
                         }
                         <span className='sm:block hidden'>{!isPreview ? "Preview" : "Editor"}</span>
                     </Button>
-                    <Button form={formId}size={'sm'} >
+                    <Button form={formId} size={'sm'} variant={'outline'} onClick={()=>setIsDraft(true)} >
+                        <Save />
+                        <span>Save</span>
+                    </Button>
+                    <Button form={formId} size={'sm'} onClick={()=>setIsDraft(false)} >
                         <ExternalLink />
                         <span>Publish</span>
                     </Button>
@@ -68,7 +74,7 @@ function FormEditor() {
                 onDragStart={handleActiveElement}>
                 <div className="sm:h-[86vh] flex gap-3 mt-3 items-center justify-center flex-col-reverse sm:flex-row">
                     {/* canvas */}
-                    <FormCanvas allElements={allElements} formId={formId} />
+                    <FormCanvas allElements={allElements} formId={formId} isDraft={isDraft} />
                     {
                         !isPreview &&
                         <>
