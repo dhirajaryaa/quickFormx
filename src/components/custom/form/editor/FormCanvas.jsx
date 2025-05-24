@@ -8,22 +8,28 @@ import SelectedField from "./SelectedField";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import PropertiesEditor from "./PropertiesEditor";
 import { useState } from "react";
-import { useEffect } from "react";
+import { useForm as useFormHook } from "@/hooks/useForm";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router";
 
-function FormCanvas({ allElements }) {
+function FormCanvas({ allElements, formId }) {
+    const navigate = useNavigate();
     const [activeElement, setActiveElement] = useState(null);
-    const { isPreview, createForm ,setCreateFormFields} = useStore();
+    const { createNewForm: { mutateAsync, isPending }, getAllForm: { refetch } } = useFormHook()
+    const { isPreview, createForm, setForms, inEditMode } = useStore();
     // form hook
-    const { register, formState: { errors }, handleSubmit, control } = useForm({
-        defaultValues: {
-            "title": createForm.title || "",
-            "description": createForm.description || "",
-            "authUser": false,
-            "isDraft": true,
-            "fields": createForm.field || []
-        }
-
-    });
+    const { register,
+        handleSubmit,
+        control, reset } = useForm({
+            defaultValues: {
+                "title": createForm.title || "",
+                "description": createForm.description || "",
+                "authUser": false,
+                "isDraft": true,
+                "fields": createForm.fields || []
+            }
+        });
     // use filed array to dynamic fields
     const { fields, append, remove, move, update } = useFieldArray({
         control,
@@ -49,24 +55,33 @@ function FormCanvas({ allElements }) {
             }
 
         }
-    })
+    });
 
     // dnd
     const { setNodeRef, isOver } = useDroppable({
-        id: 'canvas',
-        data: {
-            isCanvas: true
-        }
+        id: 'canvas'
     });
 
-    useEffect(()=>{
-        setCreateFormFields(fields)
-    },[fields])
+    async function handleSubmitForm(input) {
+        const updatedFields = input.fields.map((field) => ({ ...field, name: `${field.label.split(" ")[0].toLowerCase()}_${Date.now()}` }));
+        let res
+        if(!inEditMode){
+            res = await mutateAsync({ ...input, fields: updatedFields });
+        }
+        if (res.statusCode >= 400) { // error
+            toast.error(res.message);
+        } else { // success
+            const res = await refetch()
+            setForms(res?.data?.data);
+            reset()
+            navigate("/forms");
+        }
+    }
 
     return (
         <section className={`bg-muted p-2 rounded-lg shadow-lg h-full flex-1 ${isPreview ? "sm:max-w-2xl" : "w-full"}`}>
             <ScrollArea className="h-[84vh]">
-                <form onSubmit={handleSubmit} className="grid gap-2" >
+                <form id={formId} onSubmit={handleSubmit(handleSubmitForm)} className="grid gap-2" >
                     {/* for title  */}
                     <div className="grid gap-2 bg-background p-4 rounded-lg border">
                         <Label htmlFor="title" className={'ml-1'}>Title <span className="text-destructive">*</span></Label>

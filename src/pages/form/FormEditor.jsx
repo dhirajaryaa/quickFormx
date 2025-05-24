@@ -22,11 +22,11 @@ import useStore from '@/store';
 import { useForm } from '@/hooks/useForm';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router';
+import { useId } from 'react';
 
 function FormEditor() {
-    const { isPreview, togglePreview, createForm,setForms } = useStore();
-    const navigate = useNavigate();
-    const { createNewForm: { mutateAsync, isPending }} = useForm()
+    const formId = useId()
+    const { isPreview, togglePreview } = useStore();
     const allElements = [
         { type: "text", icon: Type },
         { type: "textarea", icon: AlignLeft },
@@ -46,18 +46,6 @@ function FormEditor() {
         setActiveBtn(active.data?.current?.element)
     }
 
-    // handle form create
-    async function handleFormCreate() {
-        const updatedFields = createForm.fields.map((field) => ({ ...field, name: `${field.label.split(" ")[0].toLowerCase()}_${Date.now()}` }));
-        const res = await mutateAsync({ ...createForm, fields: updatedFields });
-        if (res.statusCode >= 400) { // error
-            toast.error(res.message);
-        } else { // success
-            setForms(res?.data);
-            navigate("/forms");
-        }
-    }
-
     return (
         <main className="p-3">
             <PageHeader title={"Create Form"} >
@@ -70,7 +58,7 @@ function FormEditor() {
                         }
                         <span className='sm:block hidden'>{!isPreview ? "Preview" : "Editor"}</span>
                     </Button>
-                    <Button type={'button'} size={'sm'} onClick={handleFormCreate}>
+                    <Button form={formId}size={'sm'} >
                         <ExternalLink />
                         <span>Publish</span>
                     </Button>
@@ -80,7 +68,7 @@ function FormEditor() {
                 onDragStart={handleActiveElement}>
                 <div className="sm:h-[86vh] flex gap-3 mt-3 items-center justify-center flex-col-reverse sm:flex-row">
                     {/* canvas */}
-                    <FormCanvas allElements={allElements} />
+                    <FormCanvas allElements={allElements} formId={formId} />
                     {
                         !isPreview &&
                         <>

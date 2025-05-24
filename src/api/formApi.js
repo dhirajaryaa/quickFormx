@@ -12,8 +12,6 @@ const getForms = async () => {
     }
 }
 const createForm = async (data) => {
-    console.log(data);
-
     try {
         const response = await axios.post(`${API_URL}/forms`,data);
         return response.data;

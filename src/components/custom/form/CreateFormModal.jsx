@@ -34,7 +34,7 @@ function CreateFormModal() {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button className={"h-35 sm:h-auto border border-dashed flex flex-col bg-accent/50 shadow hover:shadow-md text-foreground/70 transition-all duration-200 cursor-pointer"} variant='ghost' >
+                <Button className={"h-35 sm:h-auto sm:min-h-45 border border-dashed flex flex-col bg-accent/50 shadow hover:shadow-md text-foreground/70 transition-all duration-200 cursor-pointer"} variant='ghost' >
                     <FilePlus className='size-5 sm:size-7' />
                     <span className='font-bold text-sm sm:text-xl '>Create New Form</span>
                 </Button>
