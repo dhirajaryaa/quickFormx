@@ -62,7 +62,7 @@ function FormEditor() {
                     </Button>
                     <Button form={formId} size={'sm'} variant={'outline'} onClick={()=>setIsDraft(true)} >
                         <Save />
-                        <span>Save</span>
+                        <span className='sm:block hidden'>Save</span>
                     </Button>
                     <Button form={formId} size={'sm'} onClick={()=>setIsDraft(false)} >
                         <ExternalLink />
