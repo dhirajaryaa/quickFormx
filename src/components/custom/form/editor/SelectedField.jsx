@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/select"
 import { Checkbox } from '@/components/ui/checkbox';
 
-function SelectedField({ field, remove, index, move, isPreview, setActiveElement }) {
+function SelectedField({ field, remove, index, move, isPreview, setActiveElement,register,control }) {
     const toTextField = ["text", "password", "email", "url", "number", "date", "file"];
 
     function handleActiveElement() {

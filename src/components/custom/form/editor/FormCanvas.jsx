@@ -12,8 +12,10 @@ import { useForm as useFormHook } from "@/hooks/useForm";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { formModalSchema } from "@/schema/formModal";
 
-function FormCanvas({ allElements, formId,isDraft }) {
+function FormCanvas({ allElements, formId, isDraft }) {
     const navigate = useNavigate();
     const [activeElement, setActiveElement] = useState(null);
     const { createNewForm: { mutateAsync, isPending }, getAllForm: { refetch } } = useFormHook()
@@ -21,14 +23,15 @@ function FormCanvas({ allElements, formId,isDraft }) {
     // form hook
     const { register,
         handleSubmit,
-        control, reset } = useForm({
+        control, reset, formState: { errors }, setError, clearErrors } = useForm({
             defaultValues: {
                 "title": createForm.title || "",
                 "description": createForm.description || "",
                 "authUser": false,
-                "isDraft": isDraft ||true,
+                "isDraft": isDraft || true,
                 "fields": createForm.fields || []
-            }
+            },
+            resolver: zodResolver(formModalSchema)
         });
     // use filed array to dynamic fields
     const { fields, append, remove, move, update } = useFieldArray({
@@ -56,6 +59,8 @@ function FormCanvas({ allElements, formId,isDraft }) {
 
         }
     });
+    console.log(fields);
+
 
     // dnd
     const { setNodeRef, isOver } = useDroppable({
@@ -63,18 +68,39 @@ function FormCanvas({ allElements, formId,isDraft }) {
     });
 
     async function handleSubmitForm(input) {
-        const updatedFields = input.fields.map((field) => ({ ...field, name: `${field.label.split(" ")[0].toLowerCase()}_${Date.now()}` }));
-        let res
-        if(!inEditMode){
-            res = await mutateAsync({ ...input, fields: updatedFields,isDraft });
+        if (fields.length === 0) {
+            console.log("hello");
+
+            setError("root", {
+                type: "manual",
+                message: "Add something — just one field is enough to save!",
+            });
+            return;
         }
-        if (res.statusCode >= 400) { // error
-            toast.error(res.message);
-        } else { // success
-            const res = await refetch()
-            setForms(res?.data?.data);
-            reset()
+        clearErrors("root"); // Clear error when fields exist
+        const updatedFields = fields.map((field) => ({
+            ...field,
+            name: `${field.label.split(" ")[0].toLowerCase()}_${Date.now()}`
+        }));
+        let response;
+        if (!inEditMode) {
+            response = await mutateAsync({ ...input, fields: updatedFields, isDraft });
+            if (response.statusCode >= 400) {
+                toast.error(response.message || "Something went wrong.");
+                return;
+            }
+            const refetched = await refetch();
+            toast.success(
+                isDraft
+                    ? "Draft saved! 💾 Keep going — you’re doing great! 💪"
+                    : "Published! 🎉 Your work is live — awesome job! 🌟"
+            );
+            setForms(refetched?.data?.data);
+            reset();
             navigate("/forms");
+        } else {
+            // handle edit mode if needed
+            toast.info("Edit mode logic not implemented.");
         }
     }
 
@@ -82,6 +108,9 @@ function FormCanvas({ allElements, formId,isDraft }) {
         <section className={`bg-muted p-2 rounded-lg shadow-lg h-full flex-1 ${isPreview ? "sm:max-w-2xl" : "w-full"}`}>
             <ScrollArea className="h-[84vh]">
                 <form id={formId} onSubmit={handleSubmit(handleSubmitForm)} className="grid gap-2" >
+                    {
+                        errors.root && <div className='text-destructive text-xs sm:text-sm font-medium bg-destructive/10 backdrop-blur-xl border border-destructive/20 py-2 px-4 rounded-lg'>{errors.root.message}</div>
+                    }
                     {/* for title  */}
                     <div className="grid gap-2 bg-background p-4 rounded-lg border">
                         <Label htmlFor="title" className={'ml-1'}>Title <span className="text-destructive">*</span></Label>
@@ -90,7 +119,11 @@ function FormCanvas({ allElements, formId,isDraft }) {
                             className={"font-semibold text-sm"}
                             placeholder="Enter Form Title here"
                             {...register("title")}
+                            aria-invalid={errors.title ? "true" : "false"}
                         />
+                        {
+                            errors.title && <span className='text-destructive text-xs'>{errors.title.message}</span>
+                        }
                     </div>
                     {/* for description  */}
                     <div className="grid gap-2 bg-background p-4 rounded-lg border">
@@ -100,7 +133,11 @@ function FormCanvas({ allElements, formId,isDraft }) {
                             className={"h-19 resize-none text-sm"}
                             {...register("description")}
                             placeholder="Enter Form Description here"
+                            aria-invalid={errors.description ? "true" : "false"}
                         />
+                        {
+                            errors.description && <span className='text-destructive text-xs'>{errors.description.message}</span>
+                        }
                     </div>
                     {/* for dnd fields  */}
                     <div className="w-full grid gap-2 min-h-18 " ref={setNodeRef}>
@@ -112,6 +149,8 @@ function FormCanvas({ allElements, formId,isDraft }) {
                                     remove={remove}
                                     index={index}
                                     move={move}
+                                    register={register}
+                                    control={control}
                                     isPreview={isPreview}
                                     setActiveElement={setActiveElement}
                                 />
