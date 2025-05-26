@@ -30,6 +30,10 @@ const router = createBrowserRouter([
             { //? create form page with auth
                 path: "forms/create",
                 Component: FormEditor
+            },
+            { //? edit form page with auth
+                path: "forms/:formId/edit",
+                Component: FormEditor
             }
         ]
     },

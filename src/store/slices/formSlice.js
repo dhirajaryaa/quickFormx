@@ -13,6 +13,7 @@ const createFormSlice = (set) => ({
     setActiveForm: (form) => set(() => ({ activeForm: form })),
     setCreateFormData: (data) => set((prev) => ({ createForm: { ...prev.createForm, ...data } })),
     setCreateFormFields: (data) => set((prev) => ({ createForm: { ...prev.createForm, fields: data } })),
-    togglePreview: () => set((prev) => ({ isPreview: !prev.isPreview }))
+    togglePreview: () => set((prev) => ({ isPreview: !prev.isPreview })),
+    setInEditMode: (value) => set((prev) => ({ inEditMode: value }))
 });
 export default createFormSlice;

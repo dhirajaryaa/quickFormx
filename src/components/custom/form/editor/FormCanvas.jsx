@@ -10,7 +10,6 @@ import PropertiesEditor from "./PropertiesEditor";
 import { useState } from "react";
 import { useForm as useFormHook } from "@/hooks/useForm";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formModalSchema } from "@/schema/formModal";
@@ -18,7 +17,7 @@ import { formModalSchema } from "@/schema/formModal";
 function FormCanvas({ allElements, formId, isDraft }) {
     const navigate = useNavigate();
     const [activeElement, setActiveElement] = useState(null);
-    const { createNewForm: { mutateAsync, isPending }, getAllForm: { refetch } } = useFormHook()
+    const { createNewForm: { mutateAsync }, getAllForm: { refetch } } = useFormHook()
     const { isPreview, createForm, setForms, inEditMode } = useStore();
     // form hook
     const { register,
@@ -59,9 +58,6 @@ function FormCanvas({ allElements, formId, isDraft }) {
 
         }
     });
-    console.log(fields);
-
-
     // dnd
     const { setNodeRef, isOver } = useDroppable({
         id: 'canvas'

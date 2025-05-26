@@ -21,14 +21,19 @@ import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import useStore from '@/store';
 import { useForm } from '@/hooks/useForm';
-import { toast } from 'sonner';
-import { useNavigate } from 'react-router';
 import { useId } from 'react';
+import { useLocation } from 'react-router';
+import { useEffect } from 'react';
+import { Loader2 } from 'lucide-react';
+import { useParams } from 'react-router';
 
 function FormEditor() {
-    const formId = useId()
-    const [isDraft,setIsDraft] = useState(true);
-    const { isPreview, togglePreview } = useStore();
+    const formId = useId();
+    const {formId:id} = useParams();
+    const { createNewForm: { isPending },getForm:{data} } = useForm(id);
+    const { pathname } = useLocation()
+    const [isDraft, setIsDraft] = useState(true);
+    const { isPreview, togglePreview, setInEditMode, inEditMode,setCreateFormData,createForm } = useStore();
     const allElements = [
         { type: "text", icon: Type },
         { type: "textarea", icon: AlignLeft },
@@ -47,11 +52,23 @@ function FormEditor() {
     function handleActiveElement({ active }) {
         setActiveBtn(active.data?.current?.element)
     };
+    // check if edit mode
+    // useEffect(() => {
+    //     const mode = pathname?.split("/")[3];
+    //     !inEditMode && mode === "edit" && setInEditMode(true);
+    // }, [pathname])
+    console.log(data);
+    // inEditMode && setCreateFormData(data?.data[0]);
+
+    console.log(createForm);
+
+
 
     return (
         <main className="p-3">
-            <PageHeader title={"Create Form"} >
+            <PageHeader title={`${inEditMode ? "Edit" : "Create"} Form`} >
                 <div className='flex gap-2'>
+                    {/* preview  */}
                     <Button type={'button'} variant={'secondary'} onClick={togglePreview} size={'sm'}>
                         {
                             !isPreview ?
@@ -60,12 +77,20 @@ function FormEditor() {
                         }
                         <span className='sm:block hidden'>{!isPreview ? "Preview" : "Editor"}</span>
                     </Button>
-                    <Button form={formId} size={'sm'} variant={'outline'} onClick={()=>setIsDraft(true)} >
-                        <Save />
+                    {/* draft  */}
+                    <Button form={formId} size={'sm'} variant={'outline'} onClick={() => setIsDraft(true)} disabled={isPending} >
+                        {
+                            isPending ? <Loader2 className='animate-spin size-6' /> :
+                                <Save />
+                        }
                         <span className='sm:block hidden'>Save</span>
                     </Button>
-                    <Button form={formId} size={'sm'} onClick={()=>setIsDraft(false)} >
-                        <ExternalLink />
+                    {/* publish  */}
+                    <Button form={formId} size={'sm'} onClick={() => setIsDraft(false)} disabled={isPending} >
+                        {
+                        isPending ? <Loader2 className='animate-spin size-6' /> :
+                                <ExternalLink />
+                        }
                         <span>Publish</span>
                     </Button>
                 </div>

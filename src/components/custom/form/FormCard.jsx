@@ -2,9 +2,19 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { formatDate } from "@/lib/formatDate"
-import { ArrowRightIcon, View, Send } from "lucide-react"
+import useStore from "@/store"
+import { Edit, View, Send } from "lucide-react"
+import { useNavigate } from "react-router"
 
 function FormCard({ form }) {
+    const navigate = useNavigate();
+    const {setInEditMode} = useStore()
+    const handleEditMode = (e)  =>{
+        e.stopPropagation();
+    e.preventDefault();
+        setInEditMode(true);
+        navigate(`/forms/${form._id}/edit`)
+    }
 
     return (
         <Card className="bg-muted/50  shadow hover:shadow-md transition-all duration-200 py-4 cursor-pointer">
@@ -29,8 +39,8 @@ function FormCard({ form }) {
                 {form.description}
             </CardContent>
             <CardFooter className={'py-0'}>
-                <Button className={"w-full"}>
-                    <span>view submission</span> <ArrowRightIcon />
+                <Button className={"w-full"} onClick={handleEditMode}>
+                    <Edit /> <span>Edit Form</span>
                 </Button>
             </CardFooter>
 

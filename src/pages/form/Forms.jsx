@@ -26,9 +26,10 @@ function Forms() {
                 <CreateFormModal />
                 <Suspense fallback={[1, 2, 3, 4].map((el) => <FormSkeleton key={el} />)}>
                     {
-                        forms?.map((form) => <Link className={"rounded-2xl w-full"} key={form._id} to={`/forms/${form._id}`} >
-                            <FormCard form={form} />
-                        </Link>)
+                        forms?.map((form) =>
+                            <Link className={"rounded-2xl w-full"} key={form._id} to={`/forms/${form._id}`} >
+                                <FormCard form={form} />
+                            </Link>)
                     }
                 </Suspense>
             </section>
