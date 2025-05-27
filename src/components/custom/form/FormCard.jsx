@@ -8,11 +8,12 @@ import { useNavigate } from "react-router"
 
 function FormCard({ form }) {
     const navigate = useNavigate();
-    const {setInEditMode} = useStore()
+    const {setInEditMode,setCreateFormData} = useStore()
     const handleEditMode = (e)  =>{
         e.stopPropagation();
     e.preventDefault();
         setInEditMode(true);
+        setCreateFormData(form)
         navigate(`/forms/${form._id}/edit`)
     }
 
