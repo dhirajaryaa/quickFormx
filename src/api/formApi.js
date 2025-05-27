@@ -27,9 +27,18 @@ const createForm = async (data) => {
         return error?.response?.data
     }
 }
+const updateOneForm = async ({id,data}) => {
+    try {
+        const response = await axios.patch(`${API_URL}/forms/${id}`,data);
+        return response.data;
+    } catch (error) {
+        return error?.response?.data
+    }
+}
 
 export {
     getForms,
     getOneForm,
-    createForm
+    createForm,
+    updateOneForm
 }
