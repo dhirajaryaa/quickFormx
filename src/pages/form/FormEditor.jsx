@@ -25,15 +25,13 @@ import { useId } from 'react';
 import { useLocation } from 'react-router';
 import { useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
-import { useParams } from 'react-router';
 
 function FormEditor() {
     const formId = useId();
-    const {formId:id} = useParams();
-    const { createNewForm: { isPending },getForm:{data} } = useForm(id);
+    const { createNewForm: { isPending } } = useForm();
     const { pathname } = useLocation()
     const [isDraft, setIsDraft] = useState(true);
-    const { isPreview, togglePreview, setInEditMode, inEditMode,setCreateFormData,createForm } = useStore();
+    const { isPreview, togglePreview, setInEditMode, inEditMode } = useStore();
     const allElements = [
         { type: "text", icon: Type },
         { type: "textarea", icon: AlignLeft },
@@ -53,14 +51,10 @@ function FormEditor() {
         setActiveBtn(active.data?.current?.element)
     };
     // check if edit mode
-    // useEffect(() => {
-    //     const mode = pathname?.split("/")[3];
-    //     !inEditMode && mode === "edit" && setInEditMode(true);
-    // }, [pathname])
-    console.log(data);
-    // inEditMode && setCreateFormData(data?.data[0]);
-
-    console.log(createForm);
+    useEffect(() => {
+        const mode = pathname?.split("/")[3];
+        !inEditMode && mode === "edit" && setInEditMode(true);
+    }, [pathname]);
 
 
 
@@ -78,21 +72,34 @@ function FormEditor() {
                         <span className='sm:block hidden'>{!isPreview ? "Preview" : "Editor"}</span>
                     </Button>
                     {/* draft  */}
-                    <Button form={formId} size={'sm'} variant={'outline'} onClick={() => setIsDraft(true)} disabled={isPending} >
-                        {
-                            isPending ? <Loader2 className='animate-spin size-6' /> :
-                                <Save />
-                        }
-                        <span className='sm:block hidden'>Save</span>
-                    </Button>
-                    {/* publish  */}
-                    <Button form={formId} size={'sm'} onClick={() => setIsDraft(false)} disabled={isPending} >
-                        {
-                        isPending ? <Loader2 className='animate-spin size-6' /> :
-                                <ExternalLink />
-                        }
-                        <span>Publish</span>
-                    </Button>
+                    {
+                        isDraft ?
+                            <Button form={formId} size={'sm'} disabled={isPending} >
+                                {
+                                    isPending ? <Loader2 className='animate-spin size-6' /> :
+                                        <Save />
+                                }
+                                <span className='sm:block hidden'>Update</span>
+                            </Button> :
+                            <>
+                                <Button form={formId} size={'sm'} variant={'outline'} onClick={() => setIsDraft(true)} disabled={isPending} >
+                                    {
+                                        isPending ? <Loader2 className='animate-spin size-6' /> :
+                                            <Save />
+                                    }
+                                   <span className='sm:block hidden'>Save</span>
+                                </Button>
+                                {/* publish  */}
+                                <Button form={formId} size={'sm'} onClick={() => setIsDraft(false)} disabled={isPending} >
+                                    {
+                                        isPending ? <Loader2 className='animate-spin size-6' /> :
+                                            <ExternalLink />
+                                    }
+                                    <span>Publish</span>
+                                </Button>
+                            </>
+                    }
+
                 </div>
             </PageHeader>
             <DndContext

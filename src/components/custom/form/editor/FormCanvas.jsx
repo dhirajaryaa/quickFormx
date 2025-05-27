@@ -13,12 +13,14 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formModalSchema } from "@/schema/formModal";
+import { useEffect } from "react";
+
 
 function FormCanvas({ allElements, formId, isDraft }) {
     const navigate = useNavigate();
     const [activeElement, setActiveElement] = useState(null);
-    const { createNewForm: { mutateAsync }, getAllForm: { refetch } } = useFormHook()
-    const { isPreview, createForm, setForms, inEditMode } = useStore();
+    const { createNewForm: { mutateAsync }, getAllForm: { refetch }, updateForm: { mutateAsync: updateMutate } } = useFormHook();
+    const { isPreview, createForm, setForms, inEditMode, setInEditMode, setCreateFormData } = useStore();
     // form hook
     const { register,
         handleSubmit,
@@ -63,42 +65,67 @@ function FormCanvas({ allElements, formId, isDraft }) {
         id: 'canvas'
     });
 
-    async function handleSubmitForm(input) {
-        if (fields.length === 0) {
-            console.log("hello");
+    useEffect(() => {
+        !inEditMode && setInEditMode(false);
+        !inEditMode && setCreateFormData({ fields: [] });
 
-            setError("root", {
-                type: "manual",
-                message: "Add something — just one field is enough to save!",
-            });
-            return;
-        }
-        clearErrors("root"); // Clear error when fields exist
-        const updatedFields = fields.map((field) => ({
-            ...field,
-            name: `${field.label.split(" ")[0].toLowerCase()}_${Date.now()}`
-        }));
-        let response;
+    }, [inEditMode]);
+
+    async function handleSubmitForm(input) {
+    if (fields.length === 0) {
+        setError("root", {
+            type: "manual",
+            message: "Add at least one field to continue.",
+        });
+        return;
+    }
+
+    clearErrors("root");
+
+    const updatedFields = fields.map((field) => ({
+        ...field,
+        name: `${field.label.split(" ")[0].toLowerCase()}_${Date.now()}`
+    }));
+
+    let response;
+
+    try {
         if (!inEditMode) {
             response = await mutateAsync({ ...input, fields: updatedFields, isDraft });
+
             if (response.statusCode >= 400) {
-                toast.error(response.message || "Something went wrong.");
+                toast.error(response.message || "Something went wrong while saving.");
                 return;
             }
-            const refetched = await refetch();
+
             toast.success(
                 isDraft
                     ? "Draft saved! 💾 Keep going — you’re doing great! 💪"
-                    : "Published! 🎉 Your work is live — awesome job! 🌟"
+                    : "Published! 🎉 Your form is now live — awesome job! 🚀"
             );
-            setForms(refetched?.data?.data);
-            reset();
-            navigate("/forms");
         } else {
-            // handle edit mode if needed
-            toast.info("Edit mode logic not implemented.");
+            // Edit mode: update existing form
+            response = await updateMutate({id:createForm._id,data:{ ...input, fields: updatedFields }});
+
+            if (response?.statusCode >= 400) {
+                toast.error(response.message || "Failed to update the form.");
+                return;
+            }
+
+            toast.success("Form updated successfully! ✅ Your changes are saved.");
         }
+
+        reset();
+        const refetched = await refetch();
+        setForms(refetched?.data?.data);
+        navigate("/forms");
+
+    } catch (err) {
+        toast.error("Unexpected error occurred. Please try again.");
+        console.error(err);
     }
+}
+
 
     return (
         <section className={`bg-muted p-2 rounded-lg shadow-lg h-full flex-1 ${isPreview ? "sm:max-w-2xl" : "w-full"}`}>
