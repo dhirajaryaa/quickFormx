@@ -3,6 +3,7 @@ import RegisterPage from "./auth/RegisterPage";
 import NotFoundPage from "./NotFound";
 import Dashboard from "./Dashboard";
 import Forms from "./form/Forms";
+import FormEditor from "./form/FormEditor";
 
 
 export {
@@ -10,5 +11,6 @@ export {
     RegisterPage,
     NotFoundPage,
     Dashboard,
-    Forms
+    Forms,
+    FormEditor
 }

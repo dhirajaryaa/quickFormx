@@ -6,9 +6,12 @@ import PasswordInput from "./auth/PasswordInput";
 import LogoutBtn from "./auth/LogoutBtn";
 import PageHeader from "./PageHeader";
 import ReportCard from "./ReportCard";
-import CreateFormBtn from "./form/CreateFormBtn";
+import CreateFormModal from "./form/CreateFormModal";
 import FormCard from "./form/FormCard";
 import FormSkeleton from "./form/FormSkeleton";
+import FormCanvas from "./form/editor/FormCanvas";
+import EditorSidebar from "./form/editor/EditorSidebar";
+import DragOverWrapper from "./form/editor/DragOverWrapper";
 
 export {
     AppSidebar,
@@ -19,7 +22,10 @@ export {
     LogoutBtn,
     PageHeader,
     ReportCard,
-    CreateFormBtn,
+    CreateFormModal,
     FormCard,
-    FormSkeleton
+    FormSkeleton,
+    FormCanvas,
+    EditorSidebar,
+    DragOverWrapper
 }
