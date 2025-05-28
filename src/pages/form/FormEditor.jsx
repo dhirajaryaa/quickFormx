@@ -73,7 +73,7 @@ function FormEditor() {
                     </Button>
                     {/* draft  */}
                     {
-                        isDraft ?
+                        inEditMode ?
                             <Button form={formId} size={'sm'} disabled={isPending} >
                                 {
                                     isPending ? <Loader2 className='animate-spin size-6' /> :
@@ -87,7 +87,7 @@ function FormEditor() {
                                         isPending ? <Loader2 className='animate-spin size-6' /> :
                                             <Save />
                                     }
-                                   <span className='sm:block hidden'>Save</span>
+                                    <span className='sm:block hidden'>Save</span>
                                 </Button>
                                 {/* publish  */}
                                 <Button form={formId} size={'sm'} onClick={() => setIsDraft(false)} disabled={isPending} >

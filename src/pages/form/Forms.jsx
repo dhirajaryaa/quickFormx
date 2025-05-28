@@ -2,9 +2,7 @@ import { CreateFormModal, FormSkeleton, PageHeader } from '@/components/custom'
 import FormCard from '@/components/custom/form/FormCard';
 import { useForm } from '@/hooks/useForm'
 import useStore from '@/store';
-import { Suspense } from 'react';
-import { useEffect } from 'react';
-import { Link } from 'react-router';
+import { Suspense,useEffect } from 'react';
 
 function Forms() {
     const { getAllForm: { data, isLoading } } = useForm();
@@ -27,9 +25,7 @@ function Forms() {
                 <Suspense fallback={[1, 2, 3, 4].map((el) => <FormSkeleton key={el} />)}>
                     {
                         forms?.map((form) =>
-                            <Link className={"rounded-2xl w-full"} key={form._id} to={`/forms/${form._id}`} >
-                                <FormCard form={form} />
-                            </Link>)
+                            <FormCard form={form} key={form._id} />)
                     }
                 </Suspense>
             </section>
