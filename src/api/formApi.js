@@ -35,10 +35,19 @@ const updateOneForm = async ({id,data}) => {
         return error?.response?.data
     }
 }
+const deleteOneForm = async (id) => {
+    try {
+        const response = await axios.delete(`${API_URL}/forms/${id}`);
+        return response.data;
+    } catch (error) {
+        return error?.response?.data
+    }
+}
 
 export {
     getForms,
     getOneForm,
     createForm,
-    updateOneForm
+    updateOneForm,
+    deleteOneForm
 }

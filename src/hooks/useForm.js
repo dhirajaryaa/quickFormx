@@ -1,4 +1,4 @@
-import { createForm, getForms, getOneForm, updateOneForm } from "@/api/formApi"
+import { createForm, deleteOneForm, getForms, getOneForm, updateOneForm } from "@/api/formApi"
 import { useMutation, useQuery } from "@tanstack/react-query"
 
 export const useForm = (id) => {
@@ -17,15 +17,20 @@ export const useForm = (id) => {
     const createNewForm = useMutation({
         mutationFn: createForm
     });
-    // create form
+    // update form
     const updateForm = useMutation({
         mutationFn: updateOneForm
+    })
+    // delete form
+    const deleteForm = useMutation({
+        mutationFn: deleteOneForm
     })
 
     return {
         getAllForm,
         getForm,
         createNewForm,
-        updateForm
+        updateForm,
+        deleteForm
     }
 }
