@@ -52,11 +52,9 @@ function FormEditor() {
     };
     // check if edit mode
     useEffect(() => {
-        const mode = pathname?.split("/")[3];
-        !inEditMode && mode === "edit" && setInEditMode(true);
+        const mode = pathname?.split("/")[3];        
+        mode === "edit" ? setInEditMode(true):setInEditMode(false);
     }, [pathname]);
-
-
 
     return (
         <main className="p-3">
@@ -84,7 +82,7 @@ function FormEditor() {
                             <>
                                 <Button form={formId} size={'sm'} variant={'outline'} onClick={() => setIsDraft(true)} disabled={isPending} >
                                     {
-                                        isPending ? <Loader2 className='animate-spin size-6' /> :
+                                        isPending ? <Loader2 className='animate-spin' /> :
                                             <Save />
                                     }
                                     <span className='sm:block hidden'>Save</span>
@@ -92,7 +90,7 @@ function FormEditor() {
                                 {/* publish  */}
                                 <Button form={formId} size={'sm'} onClick={() => setIsDraft(false)} disabled={isPending} >
                                     {
-                                        isPending ? <Loader2 className='animate-spin size-6' /> :
+                                        isPending ? <Loader2 className='animate-spin' /> :
                                             <ExternalLink />
                                     }
                                     <span>Publish</span>

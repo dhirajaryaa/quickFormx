@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import SelectedField from "./SelectedField";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import PropertiesEditor from "./PropertiesEditor";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm as useFormHook } from "@/hooks/useForm";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
@@ -65,11 +65,6 @@ function FormCanvas({ allElements, formId, isDraft }) {
         id: 'canvas'
     });
 
-    useEffect(() => {
-        !inEditMode && setInEditMode(false);
-        !inEditMode && setCreateFormData({ fields: [] });
-
-    }, [inEditMode]);
 
     async function handleSubmitForm(input) {
         if (fields.length === 0) {

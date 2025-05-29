@@ -84,8 +84,8 @@ function SelectedField({ field, remove, index, move, isPreview, setActiveElement
                     </SelectTrigger>
                     <SelectContent>
                         {
-                            field?.options?.map((el) => {
-                                return <SelectItem value={el.value} className={"capitalize"}>{el.value}</SelectItem>
+                            field?.options?.map((el,idx) => {
+                                return <SelectItem  key={`${el.value}_${idx}`} value={el.value} className={"capitalize"}>{el.value}</SelectItem>
                             })
                         }
                     </SelectContent>

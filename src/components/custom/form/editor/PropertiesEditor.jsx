@@ -108,13 +108,11 @@ function PropertiesEditor({ activeElement, update, setActiveElement }) {
                         <div className="grid gap-2">
                             <Label>Options</Label>
                             {formState.options?.map((opt, idx) => (
-                                <div key={idx} className="flex items-center gap-2">
+                                <div key={`${opt.value}-${idx}`} className="flex items-center gap-2">
                                     <Input
                                         value={opt.value}
                                         onChange={(e) => {
                                             const updatedOptions = [...formState.options,];
-                                            console.log(updatedOptions);
-
                                             updatedOptions[idx] = { ...updatedOptions[idx], value: e.target.value };
                                             handleChange("options", updatedOptions);
                                         }}
