@@ -13,6 +13,7 @@ import FormCanvas from "./form/editor/FormCanvas";
 import EditorSidebar from "./form/editor/EditorSidebar";
 import DragOverWrapper from "./form/editor/DragOverWrapper";
 import FormDelete from "./form/FormDelete";
+import InputField from "./form/submit/InputField";
 
 export {
     AppSidebar,
@@ -29,5 +30,6 @@ export {
     FormCanvas,
     EditorSidebar,
     DragOverWrapper,
-    FormDelete
+    FormDelete,
+    InputField
 }

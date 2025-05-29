@@ -8,7 +8,13 @@ import { Controller } from "react-hook-form";
 
 function InputField({ field, errors, register, index, control }) {
   const toTextField = ["text", "password", "email", "url", "number", "file"];
-  const error = errors?.[field.name]
+  const error = errors?.[field.name];
+
+  function handleCheckBoxChange(e){
+console.log(e);
+
+  }
+
 
 
   return (
@@ -41,19 +47,18 @@ function InputField({ field, errors, register, index, control }) {
         <Controller
           name={field.name}
           control={control}
-          render={(field) => (
+          render={({ field: radioInput }) => (
             <RadioGroup
-              value={field.value}
-              onValueChange={field.onChange}
+              value={radioInput.value || ""}
+              onValueChange={radioInput.onChange}
               className={'text-sm'}>
               {
-                !field.options.length > 0 ? "Add Properties" :
-                  field?.options?.map((el, idx) => {
-                    return <div className="flex items-center space-x-2" key={idx}>
-                      <RadioGroupItem value={el.toLowerCase()} id={field.id} />
-                      <Label htmlFor={field.id}>{el}</Label>
-                    </div>
-                  })
+                field?.options?.map((el, idx) => {
+                  return <div className="flex items-center space-x-2" key={idx}>
+                    <RadioGroupItem value={el.value.toLowerCase()} id={field.id} className={"bg-accent"} />
+                    <Label htmlFor={field.id}>{el.value}</Label>
+                  </div>
+                })
               }
             </RadioGroup>
           )}
@@ -64,10 +69,10 @@ function InputField({ field, errors, register, index, control }) {
         <Controller
           control={control}
           name={field.name}
-          render={(field) => (
+          render={({ field: selectInput }) => (
             <Select
-              value={field.value}
-              onValueChange={field.onChange}
+              value={selectInput.value || ""}
+              onValueChange={selectInput.onChange}
             >
               <SelectTrigger className="w-full text-sm">
                 <SelectValue placeholder={field.placeholder} />
@@ -75,14 +80,12 @@ function InputField({ field, errors, register, index, control }) {
               <SelectContent>
                 {
                   field?.options?.map((el, idx) => {
-                    return <SelectItem value={el.toLowerCase()} key={idx} className={"capitalize"}>{el}</SelectItem>
+                    return <SelectItem value={el.value.toLowerCase()} key={idx} className={"capitalize"}>{el.value}</SelectItem>
                   })
                 }
               </SelectContent>
             </Select>
           )}
-
-
         />
 
       }
@@ -92,22 +95,26 @@ function InputField({ field, errors, register, index, control }) {
         <Controller
           name={field.name}
           control={control}
-          render={(field) => (
+          defaultValue={[]}
+          render={({ field: checkboxInput }) => (
             <div className="flex space-x-2 min-h-10 flex-col gap-2">
               {
-                !field.options.length > 0 ? "Add Properties" :
-                  field?.options?.map((el, index) => {
-                    return <div className='flex gap-2' key={index}>
-                      <Checkbox id={el.toLowerCase()} checked={field.value}
-                        onCheckedChange={field.onChange} />
-                      <label
-                        htmlFor={el.toLowerCase()}
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 capitalize"
-                      >
-                        {el}
-                      </label>
-                    </div>
-                  })
+                field?.options?.map((el, index) => {
+                  console.log(el);
+                  
+                  return <div className='flex gap-2' key={index}>
+                    <Checkbox id={el.value.toLowerCase()}
+                      checked={!!el.checked}
+                      onCheckedChange={handleCheckBoxChange}
+                      className={"bg-accent"} />
+                    <label
+                      htmlFor={el.value.toLowerCase()}
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 capitalize"
+                    >
+                      {el.value}
+                    </label>
+                  </div>
+                })
               }
             </div>
           )}

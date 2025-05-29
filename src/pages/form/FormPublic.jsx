@@ -1,7 +1,11 @@
+import { InputField } from "@/components/custom"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { useForm as useFormHook } from "@/hooks/useForm"
-import { Send,Loader2 } from "lucide-react"
+import { Send, Loader2 } from "lucide-react"
+import { useFieldArray, useForm } from "react-hook-form"
 import { useParams } from "react-router"
 
 function FormPublic() {
@@ -10,7 +14,7 @@ function FormPublic() {
   // const { getForm: { data } } = useFormHook(publicID)
   // console.log(data);
 
-  const form = {
+const form = {
   "_id": "6837acc49235103de0bbdcce",
   "title": "Job Application Form",
   "description": "This form collects detailed information from job applicants. It's designed to capture not just basic personal data but also educational background, work experience, and skills. The form helps HR teams filter suitable candidates for interviews and future roles.",
@@ -65,7 +69,7 @@ function FormPublic() {
       "name": "github_1748479172660",
       "required": true,
       "type": "url",
-      "placeholder": "Give me github prfile link",
+      "placeholder": "Give me github profile link",
       "options": []
     },
     {
@@ -75,6 +79,47 @@ function FormPublic() {
       "type": "textarea",
       "placeholder": "Any message for query",
       "options": []
+    },
+    {
+      "label": "Preferred Job Role",
+      "name": "job_role_1748479172660",
+      "required": true,
+      "type": "select",
+      "placeholder": "Select your preferred role",
+      "options": [
+        { "value": "Frontend Developer", "checked": false },
+        { "value": "Backend Developer", "checked": false },
+        { "value": "Full Stack Developer", "checked": true },
+        { "value": "UI/UX Designer", "checked": false }
+      ]
+    },
+    {
+      "label": "Employment Type",
+      "name": "employment_type_1748479172660",
+      "required": true,
+      "type": "radio",
+      "placeholder": "",
+      "options": [
+        { "value": "Full-time", "checked": true },
+        { "value": "Part-time", "checked": false },
+        { "value": "Internship", "checked": false },
+        { "value": "Freelance", "checked": false }
+      ]
+    },
+    {
+      "label": "Technical Skills",
+      "name": "skills_1748479172660",
+      "required": true,
+      "type": "checkbox",
+      "placeholder": "",
+      "options": [
+        { "value": "HTML", "checked": true },
+        { "value": "CSS", "checked": true },
+        { "value": "JavaScript", "checked": true },
+        { "value": "React", "checked": false },
+        { "value": "Node.js", "checked": false },
+        { "value": "Git", "checked": true }
+      ]
     }
   ],
   "userId": "6836336830153646cf416e5a",
@@ -91,36 +136,65 @@ function FormPublic() {
     }
   }
 };
-  
+
+  // console.log(form);
+
+  // useForm hook 
+  const { handleSubmit, register, control, formState: { errors } } = useForm();
+
+  function handleFormSubmit(formdata) {
+    console.log("Clicked");
+
+    console.log(formdata);
+
+  }
+
 
   return (
-    <section className='p-6 bg-accent/80 w-full h-screen'>
-      <Card className={'max-w-3xl mx-auto '}>
-        <CardHeader className={'text-center'}>
-          <CardTitle className={'text-lg sm:text-2xl font-bold'}>Contact Page</CardTitle>
-          <CardDescription>this is simple</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p>Card Content</p>
-        </CardContent>
-        <CardFooter className={'flex gap-2 justify-end'}>
-          <Button variant={'outline'} type="reset">
-            {
-              false ? <Loader2 className="animate-spin size-7" /> :
-                <span>Cancel</span>
+    <section className='sm:p-6 bg-accent w-full min-h-screen flex items-center justify-center'>
+      <form onSubmit={handleSubmit(handleFormSubmit)} className={'max-w-xl flex-1'} >
+        <Card className={'w-full h-full'}>
+          <CardHeader className={'text-center'}>
+            <CardTitle className={'text-lg sm:text-2xl font-bold truncate'}>{form.title}</CardTitle>
+            <CardDescription className={'line-clamp-2 sm:line-clamp-3 hover:line-clamp-none'}>{form.description}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {/* form  */}
+            <div className="grid gap-4">
 
-            }
-          </Button>
-          <Button>
-            {
-              false ? <Loader2 className="animate-spin size-7" /> : <>
-                <Send />
-                <span>Submit</span>
-              </>
-            }
-          </Button>
-        </CardFooter>
-      </Card>
+              {
+                form?.fields.map((field, index) => {
+                  return <InputField field={field} errors={errors} register={register} control={control} index={index} key={index} />
+                })
+              }
+            </div>
+
+
+          </CardContent>
+          <CardFooter className={'flex gap-2 justify-end'}>
+            <Button variant={'outline'} type="reset">
+              {
+                false ? <Loader2 className="animate-spin size-7" /> :
+                  <span>Cancel</span>
+
+              }
+            </Button>
+            <Button>
+              {
+                false ? <Loader2 className="animate-spin size-7" /> : <>
+                  <Send />
+                  <span>Submit</span>
+                </>
+              }
+            </Button>
+          </CardFooter>
+        </Card>
+        {/* branding  */}
+        {
+          form.branding === "QuickFormX" &&
+          <p className="text-center text-sm text-foreground/75 my-3">Made with <a className="text-foreground font-semibold">{form.branding}</a></p>
+        }
+      </form>
     </section>
   )
 }
