@@ -11,19 +11,20 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Controller } from "react-hook-form";
 
-function InputField({ field, errors, register, control }) {
+function InputField({ field, errors, register, control, index }) {
   const toTextField = ["text", "password", "email", "url", "number", "file"];
   const error = errors?.[field.name];
 
 
   return (
     <div className="grid gap-1" >
-      <Label htmlFor={field.id} className={'capitalize'}>{field.label} <span className={`text-destructive ${field.required ? "block" : "hidden"}`}>*</span></Label>
+      <Label htmlFor={`${field.type}_${index}`} className={'capitalize'}>{field.label} <span className={`text-destructive ${field.required ? "block" : "hidden"}`}>*</span></Label>
 
       {
         toTextField.includes(field.type) &&
         <Input
           type={field.type}
+          id={`${field.type}_${index}`}
           className={'text-sm'}
           {...register(field.name, { required: field.required && `${field.label.toLowerCase()} is required` })}
           placeholder={field.placeholder}
@@ -33,6 +34,7 @@ function InputField({ field, errors, register, control }) {
       {/* for text area  */}
       {field.type === "textarea" &&
         <Textarea
+          id={`${field.type}_${index}`}
           type={field.type}
           className={"min-h-18 text-sm"}
           {...register(field.name, { required: field.required && `${field.label.toLowerCase()} is required` })}
@@ -48,7 +50,7 @@ function InputField({ field, errors, register, control }) {
           control={control}
           defaultValue={""}
           rules={{
-            validate: (value) => field.required && !value && `${field.label} is required`
+            validate: (value) => field.required ? !!value || `${field.label} is required` : false
           }}
           render={({ field: radioInput }) => (
             <RadioGroup
@@ -74,7 +76,7 @@ function InputField({ field, errors, register, control }) {
           name={field.name}
           defaultValue={""}
           rules={{
-            validate: (value) => field.required && !value && `${field.label} is required`
+            validate: (value) => field.required ? !!value || `${field.label} is required` : true
           }}
           render={({ field: selectInput }) => (
             <Select
@@ -103,7 +105,7 @@ function InputField({ field, errors, register, control }) {
           control={control}
           defaultValue={[]}
           rules={{
-            validate: (value) => field.required ? (value && value.length > 0) || `${field.label} is required` : true
+            validate: (value) => field.required ? (value && value.length > 0) || `${field.label} is required` : false
           }}
           render={({ field: checkboxInput }) => (
             <div className="flex space-x-2 min-h-10 flex-col gap-2">
@@ -146,7 +148,7 @@ function InputField({ field, errors, register, control }) {
           control={control}
           defaultValue={null}
           rules={{
-            validate: (value) => field.required ? !value && `${field.label} date is required` : true
+            validate: (value) => field.required ? !!value || `${field.label} date is required` : true
           }}
           render={({ field: datePickerInput }) => (
             <Popover>
