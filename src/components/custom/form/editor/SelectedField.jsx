@@ -66,8 +66,8 @@ function SelectedField({ field, remove, index, move, isPreview, setActiveElement
                         !field.options.length > 0 ? "Add Properties" :
                             field?.options?.map((el) => {
                                 return <div className="flex items-center space-x-2">
-                                    <RadioGroupItem value={el.toLowerCase()} id={field.id} />
-                                    <Label htmlFor={field.id}>{el}</Label>
+                                    <RadioGroupItem value={el.value.toLowerCase()} id={field.id} />
+                                    <Label htmlFor={field.id}>{el.value}</Label>
                                 </div>
                             })
                     }
@@ -85,7 +85,7 @@ function SelectedField({ field, remove, index, move, isPreview, setActiveElement
                     <SelectContent>
                         {
                             field?.options?.map((el,idx) => {
-                                return <SelectItem  key={`${el.value}_${idx}`} value={el.value} className={"capitalize"}>{el.value}</SelectItem>
+                                return <SelectItem  key={`${el.value}_${idx}`} value={el.value.toLowerCase()} className={"capitalize"}>{el.value}</SelectItem>
                             })
                         }
                     </SelectContent>
@@ -99,14 +99,14 @@ function SelectedField({ field, remove, index, move, isPreview, setActiveElement
                         !field.options.length > 0 ? "Add Properties" :
                             field?.options?.map((el, index) => {
                                 return <div className='flex gap-2' key={index}>
-                                    <Checkbox id={el.toLowerCase()}
+                                    <Checkbox id={el.value.toLowerCase()}
                                         readOnly={!isPreview}
                                         disabled={!isPreview} />
                                     <label
-                                        htmlFor={el.toLowerCase()}
+                                        htmlFor={el.value.toLowerCase()}
                                         className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 capitalize"
                                     >
-                                        {el}
+                                        {el.value}
                                     </label>
                                 </div>
                             })

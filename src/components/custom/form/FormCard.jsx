@@ -40,7 +40,7 @@ function FormCard({ form }) {
     }
 
     return (
-        <Card className="bg-muted/50  shadow hover:shadow-md transition-all duration-200 py-4 cursor-pointer">
+        <Card className="bg-muted/50  shadow hover:shadow-md transition-all duration-200 py-4">
             <CardHeader className={"gap-0"}>
                 <CardTitle className="flex items-center justify-between">
                     <span className="font-semibold line-clamp-1">{form.title}</span>
