@@ -88,12 +88,11 @@ function FormCanvas({ allElements, formId, isDraft }) {
         try {
             if (!inEditMode) {
                 // public id gen 
-                const publicId = uuidv4();
-                const publicFormUrl = `${import.meta.env.CLIENT_URL}/form/${publicId}`
+                const publicId = uuidv4();                
                 
                 response = await mutateAsync({
                     ...input, fields: updatedFields, isDraft,
-                    publicUrl: publicFormUrl
+                    publicId
                 });
 
                 if (response.statusCode >= 400) {
