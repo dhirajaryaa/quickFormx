@@ -5,20 +5,30 @@ import { Send, Loader2 } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { useForm as useFormHook } from "@/hooks/useForm"
 import { useParams } from "react-router"
+import { useSubmission } from "@/hooks/useSubmission"
+import { toast } from "sonner"
 
 function FormPublic() {
   const { publicID } = useParams();
-  const { getPublicForm: { data, isLoading } } = useFormHook(publicID)  
-  
+  const { getPublicForm: { data, isLoading } } = useFormHook(publicID)
+
   const form = data?.data;
 
   const { handleSubmit, register, control, formState: { errors }, reset } = useForm();
+  const { saveUserSubmission: { mutateAsync, isPending } } = useSubmission();
 
-  function handleFormSubmit(formdata) {
+  async function handleFormSubmit(formdata) {
 
-    console.log(formdata);
+    const transformData = Object.entries(formdata).map(([name, value]) => ({ name, value }))
+    const response = await mutateAsync({ formId: form._id, data: transformData });
 
-
+    if (response.statusCode >= 400) {
+      toast.error(response.message || "Something went wrong while saving.");
+      return;
+    } else {
+      toast.success(response.message);
+      reset()
+    }
   }
 
   if (isLoading) {
@@ -50,16 +60,10 @@ function FormPublic() {
 
           </CardContent>
           <CardFooter className={'flex gap-2 justify-end'}>
-            <Button variant={'outline'} type="reset" onClick={reset}>
-              {
-                false ? <Loader2 className="animate-spin size-7" /> :
-                  <span>Cancel</span>
-
-              }
-            </Button>
+            <Button variant={'outline'} type="reset" onClick={reset}>Cancel</Button>
             <Button type='submit'>
               {
-                false ? <Loader2 className="animate-spin size-7" /> : <>
+                isPending ? <Loader2 className="animate-spin size-7" /> : <>
                   <Send />
                   <span>Submit</span>
                 </>
