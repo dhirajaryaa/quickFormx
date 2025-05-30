@@ -6,15 +6,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Controller } from "react-hook-form";
 
-function InputField({ field, errors, register, index, control }) {
+function InputField({ field, errors, register, control }) {
   const toTextField = ["text", "password", "email", "url", "number", "file"];
   const error = errors?.[field.name];
-
-  function handleCheckBoxChange(e){
-console.log(e);
-
-  }
-
 
 
   return (
@@ -47,6 +41,9 @@ console.log(e);
         <Controller
           name={field.name}
           control={control}
+          rules={{
+            validate: (value) => field.required && !value && `${field.label} is required`
+          }}
           render={({ field: radioInput }) => (
             <RadioGroup
               value={radioInput.value || ""}
@@ -69,6 +66,9 @@ console.log(e);
         <Controller
           control={control}
           name={field.name}
+          rules={{
+            validate: (value) => field.required && !value && `${field.label} is required`
+          }}
           render={({ field: selectInput }) => (
             <Select
               value={selectInput.value || ""}
@@ -87,7 +87,6 @@ console.log(e);
             </Select>
           )}
         />
-
       }
       {/* for checkbox  */}
       {
@@ -96,17 +95,32 @@ console.log(e);
           name={field.name}
           control={control}
           defaultValue={[]}
+          rules={{
+            validate: (value) => field.required ? (value && value.length > 0) || `${field.label} is required` : true
+          }}
           render={({ field: checkboxInput }) => (
             <div className="flex space-x-2 min-h-10 flex-col gap-2">
               {
                 field?.options?.map((el, index) => {
-                  console.log(el);
-                  
+                  const handleChange = (checked) => {
+                    if (checked) {
+                      console.log(checkboxInput.value);
+
+                      checkboxInput.onChange([...checkboxInput.value, el.value])
+                    }
+                    else {
+                      checkboxInput.onChange(
+                        checkboxInput.value.filter((v) => v !== el.value)
+                      )
+                    }
+                  }
                   return <div className='flex gap-2' key={index}>
                     <Checkbox id={el.value.toLowerCase()}
-                      checked={!!el.checked}
-                      onCheckedChange={handleCheckBoxChange}
-                      className={"bg-accent"} />
+                      checked={checkboxInput.value?.includes(el.value)}
+                      onCheckedChange={handleChange}
+                      className={"bg-accent"}
+                      value={el.value}
+                    />
                     <label
                       htmlFor={el.value.toLowerCase()}
                       className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 capitalize"
@@ -119,7 +133,13 @@ console.log(e);
             </div>
           )}
         />
-
+      }
+      {/* for data picker */}
+      {field.type === "date" &&
+      <Controller
+      name={field.name}
+      control={control}
+      />
       }
       {/* Error message */}
       {error && <p className="text-xs text-destructive">{error.message}</p>}
