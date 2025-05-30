@@ -19,6 +19,14 @@ const getOneForm = async (fromId) => {
         return error?.response?.data
     }
 }
+const getOnePublicForm = async (publicId) => {
+    try {
+        const response = await axios.get(`${API_URL}/forms/public/${publicId}`);
+        return response.data;
+    } catch (error) {
+        return error?.response?.data
+    }
+}
 const createForm = async (data) => {
     try {
         const response = await axios.post(`${API_URL}/forms`,data);
@@ -49,5 +57,6 @@ export {
     getOneForm,
     createForm,
     updateOneForm,
-    deleteOneForm
+    deleteOneForm,
+    getOnePublicForm
 }

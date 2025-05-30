@@ -1,4 +1,4 @@
-import { createForm, deleteOneForm, getForms, getOneForm, updateOneForm } from "@/api/formApi"
+import { createForm, deleteOneForm, getForms, getOneForm, getOnePublicForm, updateOneForm } from "@/api/formApi"
 import { useMutation, useQuery } from "@tanstack/react-query"
 
 export const useForm = (id) => {
@@ -6,6 +6,12 @@ export const useForm = (id) => {
     const getForm = useQuery({
         queryKey: ["forms",id],
         queryFn: ()=>getOneForm(id),
+        enabled:!!id
+    });
+    // get form
+    const getPublicForm = useQuery({
+        queryKey: [id],
+        queryFn: ()=>getOnePublicForm(id),
         enabled:!!id
     });
     // get all form
@@ -31,6 +37,7 @@ export const useForm = (id) => {
         getForm,
         createNewForm,
         updateForm,
-        deleteForm
+        deleteForm,
+        getPublicForm
     }
 }

@@ -110,10 +110,10 @@ function PropertiesEditor({ activeElement, update, setActiveElement }) {
                             {formState.options?.map((opt, idx) => (
                                 <div key={idx} className="flex items-center gap-2">
                                     <Input
-                                        value={opt}
+                                        value={opt.value}
                                         onChange={(e) => {
-                                            const updatedOptions = [...formState.options];
-                                            updatedOptions[idx] = e.target.value;
+                                            const updatedOptions = [...formState.options,];
+                                            updatedOptions[idx] = { ...updatedOptions[idx], value: e.target.value };
                                             handleChange("options", updatedOptions);
                                         }}
                                         className="text-sm"
@@ -137,7 +137,7 @@ function PropertiesEditor({ activeElement, update, setActiveElement }) {
                                 size="sm"
                                 variant="outline"
                                 onClick={() =>
-                                    handleChange("options", [...(formState.options || []), ""])
+                                    handleChange("options", [...(formState.options || []), { value: "" }])
                                 }
                             >
                                 Add Option

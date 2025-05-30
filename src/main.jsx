@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import App from './App'
-import { FormEditor, LoginPage, NotFoundPage, RegisterPage } from './pages'
+import { FormEditor, FormPublic, LoginPage, NotFoundPage, RegisterPage } from './pages'
 import { lazy } from 'react'
 const Dashboard = lazy(() => import('@/pages/Dashboard'))
 const Forms = lazy(() => import('@/pages/form/Forms'))
@@ -44,6 +44,10 @@ const router = createBrowserRouter([
     { //? register page
         path: "register",
         Component: RegisterPage
+    },
+    { //? public form
+        path: "form/:publicID",
+        Component: FormPublic
     },
     { //! not found page 404
         path: "*",

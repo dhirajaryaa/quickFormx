@@ -4,6 +4,7 @@ import NotFoundPage from "./NotFound";
 import Dashboard from "./Dashboard";
 import Forms from "./form/Forms";
 import FormEditor from "./form/FormEditor";
+import FormPublic from "./form/FormPublic";
 
 
 export {
@@ -12,5 +13,6 @@ export {
     NotFoundPage,
     Dashboard,
     Forms,
-    FormEditor
+    FormEditor,
+    FormPublic
 }
