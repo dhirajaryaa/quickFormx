@@ -24,7 +24,7 @@ function CreateFormModal() {
         resolver: zodResolver(formModalSchema)
     });
     function createFormHandler(input) {
-        setCreateFormData(input);
+        setCreateFormData({...input,fields:[]});
         // clear form
         reset();
         // navigate
