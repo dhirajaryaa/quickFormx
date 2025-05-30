@@ -14,8 +14,8 @@ import ClipBoardLink from "./ClipBoardLink"
 
 function FormCard({ form }) {
     const navigate = useNavigate();
-    const { setInEditMode, setCreateFormData,setForms } = useStore()
-    const { deleteForm: { mutateAsync, isPending },getAllForm:{refetch} } = useForm();
+    const { setInEditMode, setCreateFormData, setForms } = useStore()
+    const { deleteForm: { mutateAsync, isPending }, getAllForm: { refetch } } = useForm();
     // for edit 
     const handleEditMode = () => {
         setInEditMode(true);
@@ -34,7 +34,7 @@ function FormCard({ form }) {
         };
         const refetched = await refetch();
         setForms(refetched?.data?.data);
-        
+
         toast.success("Form Delete 🗑️ successfully! ");
 
 
@@ -49,7 +49,10 @@ function FormCard({ form }) {
                 </CardTitle>
                 <CardDescription className={'flex gap-2 text-xs items-center justify-between text-foreground/60 font-medium pt-2'}>
                     <p>{formatDate(form.updatedAt)}</p>
-                    <ClipBoardLink link={form.publicId}/>
+                    {
+                        !form.isDraft &&
+                        <ClipBoardLink link={form.publicId} />
+                    }
                 </CardDescription>
             </CardHeader>
             <CardContent className={"line-clamp-2 text-xs sm:text-sm min-h-8 sm:min-h-10"}>

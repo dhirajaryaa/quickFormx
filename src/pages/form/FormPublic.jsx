@@ -8,146 +8,11 @@ import { useParams } from "react-router"
 
 function FormPublic() {
   const { publicID } = useParams();
+  console.log(publicID);
 
-  const { getForm: { data, isLoading } } = useFormHook(publicID)
-  const form = data?.data[0];
-
+  const { getPublicForm: { data, isLoading } } = useFormHook(publicID)  
   
-
-  // const form = {
-  //   "_id": "6837acc49235103de0bbdcce",
-  //   "title": "Job Application Form",
-  //   "description": "This form collects detailed information from job applicants. It's designed to capture not just basic personal data but also educational background, work experience, and skills. The form helps HR teams filter suitable candidates for interviews and future roles.",
-  //   "authUser": false,
-  //   "publicUrl": "http://localhost:5173/form/42005c7c-88dc-4bea-bd4f-70a97f04af01",
-  //   "proForm": false,
-  //   "branding": "QuickFormX",
-  //   "isDraft": false,
-  //   "fields": [
-  //     {
-  //       "label": "Full Name",
-  //       "name": "full_1748479172660",
-  //       "required": true,
-  //       "type": "text",
-  //       "placeholder": "Enter full name",
-  //       "options": []
-  //     },
-  //     {
-  //       "label": "email",
-  //       "name": "email_1748479172660",
-  //       "required": true,
-  //       "type": "email",
-  //       "placeholder": "Enter email address",
-  //       "options": []
-  //     },
-  //     {
-  //       "label": "Mobile No.",
-  //       "name": "mobile_1748479172660",
-  //       "required": true,
-  //       "type": "number",
-  //       "placeholder": "Enter mobile no",
-  //       "options": []
-  //     },
-  //     {
-  //       "label": "Education",
-  //       "name": "education_1748479172660",
-  //       "required": true,
-  //       "type": "textarea",
-  //       "placeholder": "Enter your  Education Details here",
-  //       "options": []
-  //     },
-  //     {
-  //       "label": "LInkedin Profile",
-  //       "name": "linkedin_1748479172660",
-  //       "required": true,
-  //       "type": "url",
-  //       "placeholder": "Give me Linkedin Profile Link",
-  //       "options": []
-  //     },
-  //     {
-  //       "label": "Github",
-  //       "name": "github_1748479172660",
-  //       "required": true,
-  //       "type": "url",
-  //       "placeholder": "Give me github profile link",
-  //       "options": []
-  //     },
-  //     {
-  //       "label": "Any Message",
-  //       "name": "any_1748479172660",
-  //       "required": false,
-  //       "type": "textarea",
-  //       "placeholder": "Any message for query",
-  //       "options": []
-  //     },
-  //     {
-  //       "label": "Preferred Job Role",
-  //       "name": "job_role_1748479172660",
-  //       "required": true,
-  //       "type": "select",
-  //       "placeholder": "Select your preferred role",
-  //       "options": [
-  //         { "value": "Frontend Developer", "checked": false },
-  //         { "value": "Backend Developer", "checked": false },
-  //         { "value": "Full Stack Developer", "checked": true },
-  //         { "value": "UI/UX Designer", "checked": false }
-  //       ]
-  //     },
-  //     {
-  //       "label": "Employment Type",
-  //       "name": "employment_type_1748479172660",
-  //       "required": true,
-  //       "type": "radio",
-  //       "placeholder": "",
-  //       "options": [
-  //         { "value": "Full-time", "checked": true },
-  //         { "value": "Part-time", "checked": false },
-  //         { "value": "Internship", "checked": false },
-  //         { "value": "Freelance", "checked": false }
-  //       ]
-  //     },
-  //     {
-  //       "label": "Technical Skills",
-  //       "name": "skills_1748479172660",
-  //       "required": true,
-  //       "type": "checkbox",
-  //       "placeholder": "",
-  //       "options": [
-  //         { "value": "HTML", "checked": true },
-  //         { "value": "CSS", "checked": true },
-  //         { "value": "JavaScript", "checked": true },
-  //         { "value": "React", "checked": false },
-  //         { "value": "Node.js", "checked": false },
-  //         { "value": "Git", "checked": true }
-  //       ]
-  //     },
-  //     {
-  //       "label": "Available to Start",
-  //       "name": "start_date_1748479172660",
-  //       "required": true,
-  //       "type": "date",
-  //       "placeholder": "Select your available start date",
-  //       "options": []
-  //     }
-  //   ],
-  //   "userId": "6836336830153646cf416e5a",
-  //   "createdAt": "2025-05-29T00:39:32.399Z",
-  //   "updatedAt": "2025-05-29T00:39:32.399Z",
-  //   "__v": 0,
-  //   "userInfo": {
-  //     "_id": "6836336830153646cf416e5a",
-  //     "name": "Dhiraj Arya",
-  //     "username": "draj22779_1748382568749",
-  //     "avatar": {
-  //       "url": "https://lh3.googleusercontent.com/a/ACg8ocJcIVhZWzYOzxypeZwPeYPc0fWtnP_p7oBgbSTteBxe8B077f7x=s96-c",
-  //       "publicId": ""
-  //     }
-  //   }
-  // };
-
-  // console.log(form);
-
-  // useForm hook 
+  const form = data?.data;
 
   const { handleSubmit, register, control, formState: { errors }, reset } = useForm();
 
@@ -166,7 +31,7 @@ function FormPublic() {
 
 
   return (
-    <section className='sm:p-6 p-0 bg-accent w-full min-h-screen flex items-start sm:items-center justify-center'>
+    <section className='sm:p-6 px-3 bg-accent w-full min-h-screen flex items-center justify-center'>
       <form onSubmit={handleSubmit(handleFormSubmit)} className={'max-w-xl flex-1'} >
         <Card className={'w-full h-full'}>
           <CardHeader className={'text-center'}>

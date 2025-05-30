@@ -157,7 +157,7 @@ function InputField({ field, errors, register, control, index }) {
                   variant={"outline"}
                   type="button"
                   className={
-                    "w-1/2 justify-start text-left font-normal"
+                    "w-[250px] justify-start text-left font-normal"
                   }
                 >
                   <CalendarIcon />
