@@ -117,6 +117,14 @@ function FormPublic() {
           { "value": "Node.js", "checked": false },
           { "value": "Git", "checked": true }
         ]
+      },
+      {
+        "label": "Available to Start",
+        "name": "start_date_1748479172660",
+        "required": true,
+        "type": "date",
+        "placeholder": "Select your available start date",
+        "options": []
       }
     ],
     "userId": "6836336830153646cf416e5a",
@@ -137,18 +145,22 @@ function FormPublic() {
   // console.log(form);
 
   // useForm hook 
-  const { handleSubmit, register, control, formState: { errors } } = useForm({
-    mode:"onChange"
-  });
+  const { handleSubmit, register, control, formState: { errors }, reset } = useForm();
 
   function handleFormSubmit(formdata) {
+    console.log("click");
+
+    console.log(errors);
+
+    console.log(formdata);
+
 
   }
 
 
   return (
     <section className='sm:p-6 bg-accent w-full min-h-screen flex items-center justify-center'>
-      <form onSubmit={handleSubmit(handleFormSubmit)} className={'max-w-xl flex-1'} >
+      <form onSubmit={handleSubmit(handleFormSubmit)} id="hellokin" className={'max-w-xl flex-1'} >
         <Card className={'w-full h-full'}>
           <CardHeader className={'text-center'}>
             <CardTitle className={'text-lg sm:text-2xl font-bold truncate'}>{form.title}</CardTitle>
@@ -160,7 +172,7 @@ function FormPublic() {
 
               {
                 form?.fields.map((field, index) => {
-                  return <InputField field={field} errors={errors} register={register} control={control} index={index} key={index} />
+                  return <InputField field={field} errors={errors} register={register} control={control} key={index} />
                 })
               }
             </div>
@@ -168,14 +180,14 @@ function FormPublic() {
 
           </CardContent>
           <CardFooter className={'flex gap-2 justify-end'}>
-            <Button variant={'outline'} type="reset">
+            <Button variant={'outline'} type="reset" onClick={reset}>
               {
                 false ? <Loader2 className="animate-spin size-7" /> :
                   <span>Cancel</span>
 
               }
             </Button>
-            <Button>
+            <Button type='submit' form="hellokin">
               {
                 false ? <Loader2 className="animate-spin size-7" /> : <>
                   <Send />
