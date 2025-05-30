@@ -7,6 +7,8 @@ import { useForm as useFormHook } from "@/hooks/useForm"
 import { useParams } from "react-router"
 import { useSubmission } from "@/hooks/useSubmission"
 import { toast } from "sonner"
+import { submissionSchema } from "@/schema/submission"
+import { zodResolver } from "@hookform/resolvers/zod"
 
 function FormPublic() {
   const { publicID } = useParams();
@@ -14,7 +16,9 @@ function FormPublic() {
 
   const form = data?.data;
 
-  const { handleSubmit, register, control, formState: { errors }, reset } = useForm();
+  const { handleSubmit, register, control, formState: { errors }, reset } = useForm({
+    resolver: zodResolver(submissionSchema(form?.fields || []))
+  });
   const { saveUserSubmission: { mutateAsync, isPending } } = useSubmission();
 
   async function handleFormSubmit(formdata) {
@@ -77,6 +81,7 @@ function FormPublic() {
           <p className="text-center text-sm text-foreground/75 my-3">Made with <a className="text-foreground font-semibold">{form.branding}</a></p>
         }
       </form>
+      {/* <Button onClick={()=>createFieldSchema(form.fields)}>generate Schema</Button> */}
     </section>
   )
 }
