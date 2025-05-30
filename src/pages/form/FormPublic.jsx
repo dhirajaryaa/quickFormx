@@ -8,8 +8,6 @@ import { useParams } from "react-router"
 
 function FormPublic() {
   const { publicID } = useParams();
-  console.log(publicID);
-
   const { getPublicForm: { data, isLoading } } = useFormHook(publicID)  
   
   const form = data?.data;
