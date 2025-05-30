@@ -10,6 +10,7 @@ import { FormDelete } from ".."
 import { useForm } from "@/hooks/useForm"
 import { toast } from "sonner"
 import { Loader2 } from "lucide-react"
+import ClipBoardLink from "./ClipBoardLink"
 
 function FormCard({ form }) {
     const navigate = useNavigate();
@@ -48,14 +49,7 @@ function FormCard({ form }) {
                 </CardTitle>
                 <CardDescription className={'flex gap-2 text-xs items-center justify-between text-foreground/60 font-medium pt-2'}>
                     <p>{formatDate(form.updatedAt)}</p>
-                    <p className="flex gap-2">
-                        <span className="flex gap-1 text-xs">
-                            <View className="size-4" /> 2
-                        </span>
-                        <span className="flex gap-1 text-xs">
-                            <Send className="size-4" /> 8
-                        </span>
-                    </p>
+                    <ClipBoardLink link={form.publicId}/>
                 </CardDescription>
             </CardHeader>
             <CardContent className={"line-clamp-2 text-xs sm:text-sm min-h-8 sm:min-h-10"}>
