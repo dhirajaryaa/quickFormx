@@ -1,9 +1,14 @@
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 import { Controller } from "react-hook-form";
 
 function InputField({ field, errors, register, control }) {
@@ -41,6 +46,7 @@ function InputField({ field, errors, register, control }) {
         <Controller
           name={field.name}
           control={control}
+          defaultValue={""}
           rules={{
             validate: (value) => field.required && !value && `${field.label} is required`
           }}
@@ -52,8 +58,8 @@ function InputField({ field, errors, register, control }) {
               {
                 field?.options?.map((el, idx) => {
                   return <div className="flex items-center space-x-2" key={idx}>
-                    <RadioGroupItem value={el.value.toLowerCase()} id={field.id} className={"bg-accent"} />
-                    <Label htmlFor={field.id}>{el.value}</Label>
+                    <RadioGroupItem value={el.value?.toLowerCase()} id={`${el.value}_${idx}`} className={"bg-accent"} />
+                    <Label htmlFor={`${el.value}_${idx}`}>{el.value}</Label>
                   </div>
                 })
               }
@@ -66,12 +72,13 @@ function InputField({ field, errors, register, control }) {
         <Controller
           control={control}
           name={field.name}
+          defaultValue={""}
           rules={{
             validate: (value) => field.required && !value && `${field.label} is required`
           }}
           render={({ field: selectInput }) => (
             <Select
-              value={selectInput.value || ""}
+              value={selectInput.value}
               onValueChange={selectInput.onChange}
             >
               <SelectTrigger className="w-full text-sm">
@@ -104,8 +111,6 @@ function InputField({ field, errors, register, control }) {
                 field?.options?.map((el, index) => {
                   const handleChange = (checked) => {
                     if (checked) {
-                      console.log(checkboxInput.value);
-
                       checkboxInput.onChange([...checkboxInput.value, el.value])
                     }
                     else {
@@ -136,10 +141,38 @@ function InputField({ field, errors, register, control }) {
       }
       {/* for data picker */}
       {field.type === "date" &&
-      <Controller
-      name={field.name}
-      control={control}
-      />
+        <Controller
+          name={field.name}
+          control={control}
+          defaultValue={null}
+          rules={{
+            validate: (value) => field.required ? !value && `${field.label} date is required` : true
+          }}
+          render={({ field: datePickerInput }) => (
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  type="button"
+                  className={
+                    "w-1/2 justify-start text-left font-normal"
+                  }
+                >
+                  <CalendarIcon />
+                  {datePickerInput.value ? format(datePickerInput.value, "PPP") : <span>Pick a date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={datePickerInput.value || ""}
+                  onSelect={date => datePickerInput.onChange(date)}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+          )}
+        />
       }
       {/* Error message */}
       {error && <p className="text-xs text-destructive">{error.message}</p>}
