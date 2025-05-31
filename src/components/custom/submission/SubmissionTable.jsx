@@ -16,13 +16,14 @@ import {
 } from "@/components/ui/table";
 import { formatDate } from "date-fns";
 import { ArrowUpRight } from "lucide-react";
-import { MoreHorizontalIcon } from "lucide-react";
-import { flexRender, getCoreRowModel } from "@tanstack/react-table";
+import { flexRender, getCoreRowModel, getSortedRowModel } from "@tanstack/react-table";
 import { SquareMousePointer } from "lucide-react";
+import { ArrowUpDownIcon } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 
 
-function SubmissionTable({ submissions }) {
+function SubmissionTable({ submissions, isLoading }) {
 
     function getDate(timestamp) {
         return formatDate(new Date(timestamp), "dd-LLL-yyyy")
@@ -83,12 +84,16 @@ function SubmissionTable({ submissions }) {
         }),
     ];
 
-    const [data] = useState(() => [...submissions]);
-
+    const [sorting, setSorting] = useState([]);
     const table = useReactTable({
-        data,
+        data: submissions,
         columns,
-        getCoreRowModel: getCoreRowModel()
+        state: {
+            sorting,
+        },
+        getCoreRowModel: getCoreRowModel(),
+        onSortingChange: setSorting,
+        getSortedRowModel: getSortedRowModel()
     });
     // console.log(table.getCoreRowModel)
 
@@ -96,18 +101,26 @@ function SubmissionTable({ submissions }) {
         <div className="flex gap-3 flex-col">
             <Table>
                 <TableCaption>A list of your form submissions.</TableCaption>
-                <TableHeader>
+                <TableHeader className={'bg-accent'}>
                     {
                         table.getHeaderGroups().map((headersGroup) => (
                             <TableRow key={headersGroup.id} >
                                 {headersGroup.headers.map((header) => (
                                     <TableHead key={header.id}>
-                                        {
-                                            flexRender(
-                                                header.column.columnDef.header,
-                                                header.getContext()
-                                            )
-                                        }
+                                        <div
+                                            {...{
+                                                className: header.column.getCanSort()
+                                                    ? "cursor-pointer select-none flex items-center gap-2" : "",
+                                                onClick: header.column.getToggleSortingHandler()
+                                            }}>
+                                            {
+                                                flexRender(
+                                                    header.column.columnDef.header,
+                                                    header.getContext()
+                                                )
+                                            }
+                                            <ArrowUpDownIcon size={15} className="text-foreground/50" />
+                                        </div>
                                     </TableHead>
                                 ))}
                             </TableRow>
@@ -115,6 +128,14 @@ function SubmissionTable({ submissions }) {
                     }
                 </TableHeader>
                 <TableBody>
+                    {isLoading && (
+                        <TableRow className="w-full h-12 bg-red-500">
+                            <td colSpan={5}>
+                                <Skeleton className="w-full h-12" />
+                            </td>
+                        </TableRow>
+                    )}
+                    {/* data show  */}
                     {table?.getRowModel()?.rows?.map((row) => (
                         <TableRow key={row.id}>
                             {row.getVisibleCells()?.map((cell) => (
