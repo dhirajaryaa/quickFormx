@@ -37,7 +37,7 @@ function FormPublic() {
 
   if (isLoading) {
     return <section className="w-full h-screen flex items-center justify-center">
-      <Loader2 className="size-9 animation-spin" />
+      <Loader2 className="size-9 animate-spin" />
     </section>
   }
 

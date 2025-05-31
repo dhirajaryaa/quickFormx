@@ -10,5 +10,13 @@ const saveSubmission = async (userInput) => {
         return error?.response?.data
     }
 }
+const getAllSubmissions = async () => {
+    try {
+        const response = await axios.get(`${API_URL}/submit/responses`);
+        return response.data;
+    } catch (error) {
+        return error?.response?.data
+    }
+}
 
-export { saveSubmission }
+export { saveSubmission,getAllSubmissions }
