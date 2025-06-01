@@ -1,7 +1,7 @@
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar'
 import { ArrowUpCircleIcon } from 'lucide-react'
 import React from 'react'
-import { Logo, LogoutBtn } from '..'
+import { Logo, LogoutBtn, Message } from '..'
 import NavItems from './NavItems'
 
 function AppSidebar() {
@@ -23,6 +23,8 @@ function AppSidebar() {
             <SidebarContent>
                 {/* links  */}
                 <NavItems />
+                {/* Message  */}
+                <Message />
             </SidebarContent>
             <SidebarFooter>
                 {/* logout btn  */}
