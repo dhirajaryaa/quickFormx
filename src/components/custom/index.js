@@ -14,6 +14,7 @@ import EditorSidebar from "./form/editor/EditorSidebar";
 import DragOverWrapper from "./form/editor/DragOverWrapper";
 import FormDelete from "./form/FormDelete";
 import InputField from "./form/submit/InputField";
+import Message from "./Message"; // remove on stable release
 
 export {
     AppSidebar,
@@ -31,5 +32,6 @@ export {
     EditorSidebar,
     DragOverWrapper,
     FormDelete,
-    InputField
+    InputField,
+    Message
 }

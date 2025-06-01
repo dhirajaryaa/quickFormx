@@ -1,7 +1,7 @@
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar'
 import { ArrowUpCircleIcon } from 'lucide-react'
 import React from 'react'
-import { Logo, LogoutBtn } from '..'
+import { Logo, LogoutBtn, Message } from '..'
 import NavItems from './NavItems'
 
 function AppSidebar() {
@@ -14,7 +14,7 @@ function AppSidebar() {
                             asChild
                             className="data-[slot=sidebar-menu-button]:!p-1.5"
                         >
-                {/* app logo  */}
+                            {/* app logo  */}
                             <Logo />
                         </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -23,6 +23,8 @@ function AppSidebar() {
             <SidebarContent>
                 {/* links  */}
                 <NavItems />
+                {/* message  */}
+                <Message />
             </SidebarContent>
             <SidebarFooter>
                 {/* logout btn  */}
