@@ -1,9 +1,5 @@
-import { useReactTable, createColumnHelper } from "@tanstack/react-table"
-import { MapPin } from "lucide-react";
-import { Calendar } from "lucide-react";
-import { TextCursorInput } from "lucide-react";
-import { Hash } from "lucide-react";
-import { useState } from "react";
+import { useReactTable, createColumnHelper, flexRender, getCoreRowModel, getSortedRowModel, getFilteredRowModel } from "@tanstack/react-table"
+import { MapPin, Calendar, TextCursorInput, Hash, ArrowUpRight, SquareMousePointer, ArrowUpDownIcon } from "lucide-react";
 import { Button } from '@/components/ui/button';
 import {
     Table,
@@ -15,15 +11,12 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { formatDate } from "date-fns";
-import { ArrowUpRight } from "lucide-react";
-import { flexRender, getCoreRowModel, getSortedRowModel } from "@tanstack/react-table";
-import { SquareMousePointer } from "lucide-react";
-import { ArrowUpDownIcon } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useState } from "react";
 
 
 
-function SubmissionTable({ submissions, isLoading }) {
+function SubmissionTable({ submissions, isLoading, globalFilter, setGlobalFilter }) {
 
     function getDate(timestamp) {
         return formatDate(new Date(timestamp), "dd-LLL-yyyy")
@@ -85,17 +78,20 @@ function SubmissionTable({ submissions, isLoading }) {
     ];
 
     const [sorting, setSorting] = useState([]);
+
     const table = useReactTable({
         data: submissions,
         columns,
         state: {
             sorting,
+            globalFilter
         },
         getCoreRowModel: getCoreRowModel(),
         onSortingChange: setSorting,
-        getSortedRowModel: getSortedRowModel()
+        onGlobalFilterChange: setGlobalFilter,
+        getSortedRowModel: getSortedRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
     });
-    // console.log(table.getCoreRowModel)
 
     return (
         <div className="flex gap-3 flex-col">
