@@ -1,13 +1,19 @@
-import { saveSubmission } from "@/api/submission";
-import { useMutation} from "@tanstack/react-query"
+import { getAllSubmissions, saveSubmission } from "@/api/submission";
+import { useMutation, useQuery } from "@tanstack/react-query"
 
 export const useSubmission = () => {
-    // set users
+    // save submission
     const saveUserSubmission = useMutation({
         mutationFn: saveSubmission
     });
+    // get all submissions
+    const getSubmissions = useQuery({
+        queryKey: ['submissions'],
+        queryFn: getAllSubmissions
+    });
 
     return {
-        saveUserSubmission
+        saveUserSubmission,
+        getSubmissions
     }
 }

@@ -21,7 +21,7 @@ function NavItems() {
         {
             name: "Submission",
             icon: <Send />,
-            href: "/submission"
+            href: "/submissions"
         },
         {
             name: "Analytics",

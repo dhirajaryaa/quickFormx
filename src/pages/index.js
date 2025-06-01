@@ -5,6 +5,7 @@ import Dashboard from "./Dashboard";
 import Forms from "./form/Forms";
 import FormEditor from "./form/FormEditor";
 import FormPublic from "./form/FormPublic";
+import Submission from "./submission/Submission";
 
 
 export {
@@ -14,5 +15,6 @@ export {
     Dashboard,
     Forms,
     FormEditor,
-    FormPublic
+    FormPublic,
+    Submission
 }
