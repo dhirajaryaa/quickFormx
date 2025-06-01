@@ -6,6 +6,7 @@ import Forms from "./form/Forms";
 import FormEditor from "./form/FormEditor";
 import FormPublic from "./form/FormPublic";
 import Submission from "./submission/Submission";
+import Feature from "./Feature"; // remove on stable release
 
 
 export {
@@ -16,5 +17,6 @@ export {
     Forms,
     FormEditor,
     FormPublic,
-    Submission
+    Submission,
+    Feature
 }

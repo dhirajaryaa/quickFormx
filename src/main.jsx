@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import App from './App'
-import { FormEditor, FormPublic, LoginPage, NotFoundPage, RegisterPage, Submission } from './pages'
+import { Feature, FormEditor, FormPublic, LoginPage, NotFoundPage, RegisterPage, Submission } from './pages'
 import { lazy } from 'react'
 const Dashboard = lazy(() => import('@/pages/Dashboard'))
 const Forms = lazy(() => import('@/pages/form/Forms'))
@@ -38,6 +38,10 @@ const router = createBrowserRouter([
             { //? for view submission
                 path: "submissions",
                 Component: Submission
+            },
+            { //? for view analytics
+                path: "analytics",
+                Component: Feature
             }
         ]
     },
