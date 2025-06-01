@@ -10,11 +10,12 @@ import { FormDelete } from ".."
 import { useForm } from "@/hooks/useForm"
 import { toast } from "sonner"
 import { Loader2 } from "lucide-react"
+import ClipBoardLink from "./ClipBoardLink"
 
 function FormCard({ form }) {
     const navigate = useNavigate();
-    const { setInEditMode, setCreateFormData,setForms } = useStore()
-    const { deleteForm: { mutateAsync, isPending },getAllForm:{refetch} } = useForm();
+    const { setInEditMode, setCreateFormData, setForms } = useStore()
+    const { deleteForm: { mutateAsync, isPending }, getAllForm: { refetch } } = useForm();
     // for edit 
     const handleEditMode = () => {
         setInEditMode(true);
@@ -33,14 +34,14 @@ function FormCard({ form }) {
         };
         const refetched = await refetch();
         setForms(refetched?.data?.data);
-        
+
         toast.success("Form Delete 🗑️ successfully! ");
 
 
     }
 
     return (
-        <Card className="bg-muted/50  shadow hover:shadow-md transition-all duration-200 py-4 cursor-pointer">
+        <Card className="bg-muted/50  shadow hover:shadow-md transition-all duration-200 py-4">
             <CardHeader className={"gap-0"}>
                 <CardTitle className="flex items-center justify-between">
                     <span className="font-semibold line-clamp-1">{form.title}</span>
@@ -48,14 +49,10 @@ function FormCard({ form }) {
                 </CardTitle>
                 <CardDescription className={'flex gap-2 text-xs items-center justify-between text-foreground/60 font-medium pt-2'}>
                     <p>{formatDate(form.updatedAt)}</p>
-                    <p className="flex gap-2">
-                        <span className="flex gap-1 text-xs">
-                            <View className="size-4" /> 2
-                        </span>
-                        <span className="flex gap-1 text-xs">
-                            <Send className="size-4" /> 8
-                        </span>
-                    </p>
+                    {
+                        !form.isDraft &&
+                        <ClipBoardLink link={form.publicId} />
+                    }
                 </CardDescription>
             </CardHeader>
             <CardContent className={"line-clamp-2 text-xs sm:text-sm min-h-8 sm:min-h-10"}>

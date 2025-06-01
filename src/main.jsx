@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import App from './App'
-import { FormEditor, LoginPage, NotFoundPage, RegisterPage } from './pages'
+import { Feature, FormEditor, FormPublic, LoginPage, NotFoundPage, RegisterPage, Submission } from './pages'
 import { lazy } from 'react'
 const Dashboard = lazy(() => import('@/pages/Dashboard'))
 const Forms = lazy(() => import('@/pages/form/Forms'))
@@ -34,6 +34,14 @@ const router = createBrowserRouter([
             { //? edit form page with auth
                 path: "forms/:formId/edit",
                 Component: FormEditor
+            },
+            { //? for view submission
+                path: "submissions",
+                Component: Submission
+            },
+            { //? for view analytics
+                path: "analytics",
+                Component: Feature
             }
         ]
     },
@@ -44,6 +52,10 @@ const router = createBrowserRouter([
     { //? register page
         path: "register",
         Component: RegisterPage
+    },
+    { //? public form
+        path: "form/:publicID",
+        Component: FormPublic
     },
     { //! not found page 404
         path: "*",
@@ -59,7 +71,7 @@ createRoot(document.getElementById('root')).render(
         <QueryClientProvider client={queryClient}>
             <Suspense fallback={
                 <div className='w-full h-screen flex items-center justify-center'><Loader2 className='size-10 animate-spin' /></div>
-                }>
+            }>
                 <RouterProvider router={router} />
             </Suspense>
             <Toaster />

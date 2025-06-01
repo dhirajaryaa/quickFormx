@@ -13,7 +13,7 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formModalSchema } from "@/schema/formModal";
-import { useEffect } from "react";
+import { v4 as uuidv4 } from 'uuid';
 
 
 function FormCanvas({ allElements, formId, isDraft }) {
@@ -65,66 +65,68 @@ function FormCanvas({ allElements, formId, isDraft }) {
         id: 'canvas'
     });
 
-    useEffect(() => {
-        !inEditMode && setInEditMode(false);
-        !inEditMode && setCreateFormData({ fields: [] });
-
-    }, [inEditMode]);
 
     async function handleSubmitForm(input) {
-    if (fields.length === 0) {
-        setError("root", {
-            type: "manual",
-            message: "Add at least one field to continue.",
-        });
-        return;
-    }
-
-    clearErrors("root");
-
-    const updatedFields = fields.map((field) => ({
-        ...field,
-        name: `${field.label.split(" ")[0].toLowerCase()}_${Date.now()}`
-    }));
-
-    let response;
-
-    try {
-        if (!inEditMode) {
-            response = await mutateAsync({ ...input, fields: updatedFields, isDraft });
-
-            if (response.statusCode >= 400) {
-                toast.error(response.message || "Something went wrong while saving.");
-                return;
-            }
-
-            toast.success(
-                isDraft
-                    ? "Draft saved! 💾 Keep going — you’re doing great! 💪"
-                    : "Published! 🎉 Your form is now live — awesome job! 🚀"
-            );
-        } else {
-            // Edit mode: update existing form
-            response = await updateMutate({id:createForm._id,data:{ ...input, fields: updatedFields }});
-
-            if (response?.statusCode >= 400) {
-                toast.error(response.message || "Failed to update the form.");
-                return;
-            }
-
-            toast.success("Form updated successfully! ✅ Your changes are saved.");
+        if (fields.length === 0) {
+            setError("root", {
+                type: "manual",
+                message: "Add at least one field to continue.",
+            });
+            return;
         }
 
-        reset();
-        const refetched = await refetch();
-        setForms(refetched?.data?.data);
-        navigate("/forms");
+        clearErrors("root");
 
-    } catch (err) {
-        toast.error("Unexpected error occurred. Please try again.");
-        console.error(err);
+
+        const updatedFields = fields.map((field) => ({
+            ...field,
+            name: `${field.label.split(" ")[0].toLowerCase()}_${Date.now()}`
+        }));
+
+        let response;
+
+        try {
+            if (!inEditMode) {
+                // public id gen 
+                const publicId = uuidv4();                
+                
+                response = await mutateAsync({
+                    ...input, fields: updatedFields, isDraft,
+                    publicId
+                });
+
+                if (response.statusCode >= 400) {
+                    toast.error(response.message || "Something went wrong while saving.");
+                    return;
+                }
+
+                toast.success(
+                    isDraft
+                        ? "Draft saved! 💾 Keep going — you’re doing great! 💪"
+                        : "Published! 🎉 Your form is now live — awesome job! 🚀"
+                );
+            } else {
+                // Edit mode: update existing form
+                response = await updateMutate({ id: createForm._id, data: { ...input, fields: updatedFields } });
+
+                if (response?.statusCode >= 400) {
+                    toast.error(response.message || "Failed to update the form.");
+                    return;
+                }
+
+                toast.success("Form updated successfully! ✅ Your changes are saved.");
+            }
+
+            reset();
+            const refetched = await refetch();
+            setForms(refetched?.data?.data);
+            navigate("/forms");
+
+        } catch (err) {
+            toast.error("Unexpected error occurred. Please try again.");
+            console.error(err);
+        }
     }
-}
 
 
     return (

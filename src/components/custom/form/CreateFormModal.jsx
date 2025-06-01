@@ -24,7 +24,7 @@ function CreateFormModal() {
         resolver: zodResolver(formModalSchema)
     });
     function createFormHandler(input) {
-        setCreateFormData(input);
+        setCreateFormData({...input,fields:[]});
         // clear form
         reset();
         // navigate
@@ -57,6 +57,7 @@ function CreateFormModal() {
                                 id="title"
                                 {...register("title")}
                                 placeholder="Enter Form Title"
+                                className={'text-sm'}
                                 aria-invalid={errors.title ? "true" : "false"}
                             />
                             {
@@ -71,7 +72,7 @@ function CreateFormModal() {
                             <Textarea
                                 id="description"
                                 {...register("description")}
-                                className={'resize-none'}
+                                className={'resize-none text-sm'}
                                 placeholder="Enter Form Description"
                                 aria-invalid={errors.description ? "true" : "false"}
                             />

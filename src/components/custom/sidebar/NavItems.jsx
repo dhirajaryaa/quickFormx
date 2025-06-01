@@ -1,11 +1,13 @@
 import { Button } from "@/components/ui/button"
 import { SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
 import { Layers, Send, BarChartIcon, PlusCircleIcon, Grid2X2 } from "lucide-react"
+import { useNavigate } from "react-router";
 import { Link } from "react-router";
 import { useLocation } from "react-router"
 
 function NavItems() {
     const { pathname } = useLocation();
+    const navigate = useNavigate();
 
     const mainMenu = [
         {
@@ -21,7 +23,7 @@ function NavItems() {
         {
             name: "Submission",
             icon: <Send />,
-            href: "/submission"
+            href: "/submissions"
         },
         {
             name: "Analytics",
@@ -35,14 +37,14 @@ function NavItems() {
             <SidebarGroupContent className="flex flex-col gap-2 mt-3">
                 <SidebarMenu>
                     <SidebarMenuItem className="flex items-center gap-2">
-                        <SidebarMenuButton asChild
+                        <SidebarMenuButton
+                            onClick={() => navigate("/forms/create")}
                             tooltip="Quick Create"
-                            className="bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/80 hover:text-primary-foreground active:bg-primary/80 active:text-primary-foreground"
+                            variant="primary"
+                            className="bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/80 hover:text-primary-foreground active:bg-primary/80 active:text-primary-foreground flex items-center justify-center"
                         >
-                            <Button >
-                                <PlusCircleIcon />
-                                <span>Quick Create</span>
-                            </Button>
+                            <PlusCircleIcon />
+                            <span>Quick Create</span>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
@@ -66,7 +68,7 @@ function NavItems() {
                     ))}
                 </SidebarMenu>
             </SidebarGroupContent>
-        </SidebarGroup>
+        </SidebarGroup >
     )
 }
 
