@@ -13,6 +13,7 @@ import {
 import { formatDate } from "date-fns";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 
 
@@ -94,9 +95,21 @@ function SubmissionTable({ submissions, isLoading, globalFilter, setGlobalFilter
     });
 
     return (
-        <div className="flex gap-3 flex-col">
+        <div className="flex gap-3 flex-col relative">
             <Table>
-                <TableCaption>A list of your form submissions.</TableCaption>
+                {
+                    isLoading &&
+                    <div className="w-full absolute top-30 flex items-center justify-center">
+                        <Loader2 className="size-8 animate-spin" />
+                    </div>
+                }
+                <TableCaption>
+                    {
+                        submissions?.length > 0 ?
+                            "Here is a list of your form submissions." :
+                            "No submissions found for this form."
+                    }
+                </TableCaption>
                 <TableHeader className={'bg-accent'}>
                     {
                         table.getHeaderGroups().map((headersGroup) => (
@@ -124,13 +137,6 @@ function SubmissionTable({ submissions, isLoading, globalFilter, setGlobalFilter
                     }
                 </TableHeader>
                 <TableBody>
-                    {isLoading && (
-                        <TableRow className="w-full h-12 bg-red-500">
-                            <td colSpan={5}>
-                                <Skeleton className="w-full h-12" />
-                            </td>
-                        </TableRow>
-                    )}
                     {/* data show  */}
                     {table?.getRowModel()?.rows?.map((row) => (
                         <TableRow key={row.id}>
